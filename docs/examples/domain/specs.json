@@ -1,0 +1,36 @@
+{
+  "nodes": [
+    {
+      "id": "spec_001",
+      "title": "Async export execution",
+      "status": "design_approved",
+      "depends_on": [],
+      "links": {
+        "ideas": ["idea_002"],
+        "mvp_items": ["mvp_001"]
+      }
+    },
+    {
+      "id": "spec_002",
+      "title": "Export download endpoint",
+      "status": "draft",
+      "depends_on": ["spec_001"],
+      "links": {
+        "ideas": [],
+        "mvp_items": ["mvp_002"]
+      }
+    },
+    {
+      "id": "spec_003",
+      "title": "Basic export error reporting",
+      "status": "draft",
+      "depends_on": ["spec_001"],
+      "links": {
+        "ideas": [],
+        "mvp_items": ["mvp_003"]
+      }
+    }
+  ],
+  "updated_at": "2026-03-12T14:00:00Z"
+}
+``

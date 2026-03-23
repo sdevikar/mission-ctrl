@@ -1,0 +1,21 @@
+{
+  "version": "v1.0",
+  "constraints": [
+    {
+      "id": "con_001",
+      "rule": "Keep architecture simple; avoid introducing new services unless strictly necessary.",
+      "rationale": "Early complexity increases maintenance cost and slows iteration.",
+      "severity": "high",
+      "scope": ["backend", "infrastructure"]
+    },
+    {
+      "id": "con_002",
+      "rule": "Avoid elaborate automated tests until core export flows are stable.",
+      "rationale": "Optimize for learning speed during early development.",
+      "severity": "medium",
+      "scope": ["testing"]
+    }
+  ],
+  "created_at": "2026-03-10T10:25:00Z",
+  "updated_at": "2026-03-10T10:25:00Z"
+}

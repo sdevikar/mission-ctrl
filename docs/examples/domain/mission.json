@@ -1,0 +1,12 @@
+{
+  "id": "mis_001",
+  "version": "v1.0",
+  "statement": "Build an end-to-end export system that allows users to reliably generate and download large datasets.",
+  "success_criteria": [
+    "User can trigger an export without timeouts",
+    "Exports complete asynchronously and are retrievable later",
+    "Failures are clearly communicated to the user"
+  ],
+  "created_at": "2026-03-10T10:15:00Z",
+  "updated_at": "2026-03-10T10:15:00Z"
+}

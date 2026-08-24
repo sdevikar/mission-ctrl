@@ -26,7 +26,7 @@ Status: current source of truth. Supersedes the skill/data-model sections of
 
 ---
 
-## 2. v1 Skill Set (9)
+## 2. v1 Skill Set (10)
 
 | Skill | Input | Output | Side Effects | Core call |
 |---|---|---|---|---|

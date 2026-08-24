@@ -3,7 +3,7 @@
 > authoritative. Sections 5–9 describe an early "VS Code first, agent-agnostic" implementation
 > plan that has since been superseded by concrete decisions: **Pi extension first, pure Python
 > core, no MCP in v1.** For current technical architecture, component design, and roadmap, see
-> `docs/architecture.md`, `docs/design.md`, and `docs/roadmap.md`. One correction worth flagging:
+> `docs/architecture.md`, `docs/design.md`, and `docs/kanban.md`. One correction worth flagging:
 > §9.1 below correctly lists `spec.create_from_idea` and `spec.update_status` as required v1
 > skills — a later draft mistakenly deferred them to v2; `docs/design.md` restores them.
 
@@ -237,7 +237,7 @@ Superseded by `docs/design.md` §3–4 (data model reference + event catalog). K
 Superseded by:
 - `docs/architecture.md` — system diagrams, component design, repo layout
 - `docs/design.md` — skill contracts, hooks, data model, event catalog
-- `docs/roadmap.md` — phases, milestones, testing, distribution
+- `docs/kanban.md` — phases, milestones, testing, distribution
 
 The original decision log (§7) is still binding for product-level calls: Mission → MVP → Constraints hierarchy, backlog-first, minimalist-enforcer posture, hybrid override model, quick-recap onboarding, skills-first (not MCP-dependent) correctness. Only the *implementation* specifics (VS Code, agent-agnostic multi-surface framing) have changed.
 

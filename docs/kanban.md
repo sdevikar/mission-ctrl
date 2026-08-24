@@ -46,11 +46,12 @@ Goal: dogfoodable end-to-end loop in Pi, shortest path. One language, no bridge,
 
 ---
 
-## M2 — Pi Extension Shell (9 skills, direct import — no bridge milestone needed)
+## M2 — Pi Extension Shell (10 skills, direct import — no bridge milestone needed)
 
 - [ ] Scaffold `packages/pi-package` (Python, pyproject.toml, depends on `mission_ctrl_core`)
-- [ ] `extension.py`: manifest registering hooks + 9 skills
+- [ ] `extension.py`: manifest registering hooks + 10 skills
 - [ ] `intent:init` — creates `.intent/`, copies schemas, templates, `INTENT_CREATED`
+- [ ] `intent:recap` — on-demand recap (session hook auto-injects; this is the user-invoked form)
 - [ ] `intent:add-idea`
 - [ ] `intent:triage` (takes Pi-supplied alignment verdict)
 - [ ] `intent:spec-create` (idea → spec node) — **fixes core-loop gap**

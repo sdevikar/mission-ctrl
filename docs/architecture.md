@@ -2,7 +2,7 @@
 ## v1 scope: Pi extension, pure Python core. No Claude plugin, no MCP, no bridge.
 Status: current source of truth. Supersedes the architecture sections of
 `mission-ctrl-technical-roadmap.md`, `mission-ctrl-common.md`,
-`mission-ctrl-claude-plugin.md`, `mission-ctrl-pi-package.md` (all deleted — see roadmap.md
+`mission-ctrl-claude-plugin.md`, `mission-ctrl-pi-package.md` (all deleted — see docs/kanban.md
 for what's deferred and why).
 
 ---
@@ -38,7 +38,7 @@ No subprocess boundary, no external network call anywhere. Pi is the only LLM in
 flowchart TB
     subgraph PiPackage["pi-package (Python)"]
         Hooks["Hooks: on_session_start, on_before_send"]
-        Skills["9 skills — see design.md §2"]
+        Skills["10 skills — see design.md §2"]
         Sync["AGENTS.md sync"]
     end
 
@@ -159,7 +159,7 @@ mission-ctrl/
 │   ├── concept.md
 │   ├── architecture.md           # this file
 │   ├── design.md
-│   ├── roadmap.md
+│   ├── kanban.md
 │   ├── scratchpad.md
 │   └── examples/
 │
@@ -176,4 +176,4 @@ Building a Claude Code plugin later means either:
 - (a) a Node → Python subprocess bridge (mirror image of the bridge we removed), or
 - (b) porting `mission_ctrl_core` to TypeScript, duplicating it.
 
-Not a v1 decision. Revisit only when the Claude plugin is actually scheduled — see `roadmap.md` Backlog.
+Not a v1 decision. Revisit only when the Claude plugin is actually scheduled — see `docs/kanban.md` Backlog.

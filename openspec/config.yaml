@@ -1,32 +1,45 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context
+context: |
+  Tech stack: Python (3.11+), Pydantic v2, pytest, uv workspaces
+  Two packages:
+    - mission_ctrl_core: pure Python library (no network, no LLM, no subprocess)
+    - mission_ctrl_pi: Pi agent extension (hooks + skills, depends on core)
+  One language, no bridge, no Node.js, no LLM in core.
+  Data layer: .intent/ JSON files + meta.jsonl (append-only event log).
+  Skill namespace: intent:<verb> (e.g. intent:init, intent:add-idea)
+  State machine lives in the skill layer; dependency enforcement in core.
+  All reasoning stays in Pi; core only validates and persists.
+  Architecture reference: docs/architecture.md
+  Data model reference: docs/design.md §3–4
+  Live examples: docs/examples/
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+# Per-artifact rules
+rules:
+  proposal:
+    - Always include a "Why", "What Changes", "Non-goals", and "Done when" section
+    - State all prerequisites explicitly (other change IDs that must be applied first)
+    - Keep proposals under 600 words
+    - Non-goals must be specific — not just "out of scope"
+  design:
+    - Every skill must have an explicit input model, output model, and side-effects row
+    - State machine diagrams are required for any component with status transitions
+    - Sanitization or security constraints must be called out explicitly
+  tasks:
+    - Break tasks into chunks achievable in a single sitting (≤2–3 hours each)
+    - Each task must be independently verifiable (testable or observable)
+    - Prerequisites are always the first section
+    - Tests and E2E scripts are mandatory sections for any change that ships code
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - Run the full test suite before marking a change as applied
+      - Verify the done-when criterion explicitly, not just "tests pass"
+      - Record the apply date in the archive summary
+  archive:
+    guidance:
+      - Summarize what was actually shipped vs. what was planned (note any deviations)
+      - Link to the git tag or commit range that corresponds to the change

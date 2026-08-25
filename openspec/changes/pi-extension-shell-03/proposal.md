@@ -1,4 +1,15 @@
-# Proposal: Pi Extension Shell (M2)
+# Proposal: Pi Extension Shell (M2) — ⚠️ SUPERSEDED
+
+> **This proposal has been split into two separate changes:**
+> - **pi-extension-shell-03a** — Core Loop (7 skills: init, add-idea, triage,
+>   spec-create, spec-status, next, status)
+> - **pi-extension-shell-03b** — Design Gate (3 skills: recap, design-propose,
+>   design-approve)
+>
+> This file is retained for historical reference. Do not implement from this
+> document — use 03a and 03b instead.
+
+---
 
 ## Why
 

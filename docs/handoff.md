@@ -45,7 +45,7 @@ then start `logic-layer-02` (planner + recap).
 ## Status — 2026-08-29
 
 ### Active OpenSpec changes (progress)
-- `core-foundation-01` — **✅ all 14 tasks complete** (implemented this session; `openspec status` = all artifacts done). Implementation lives in `packages/core/mission_ctrl_core/stores/` (`Store` base, per-type stores, `SpecStore.validate_no_cycles` via `graphlib`, `MetaStore` append-only JSONL, `IntentStore` orchestrator, `EventBuilder`) + 3 fixtures under `tests/fixtures/`. 46 tests pass, ruff clean. **Next: archive change + sync delta specs → main, then start `logic-layer-02`.**
+- ~~`core-foundation-01`~~ — **✅ complete & archived** to `openspec/changes/archive/2026-08-29-core-foundation-01`; delta spec synced to `openspec/specs/intent-store/spec.md` (first main spec). (implemented this session; `openspec status` = all artifacts done). Implementation lives in `packages/core/mission_ctrl_core/stores/` (`Store` base, per-type stores, `SpecStore.validate_no_cycles` via `graphlib`, `MetaStore` append-only JSONL, `IntentStore` orchestrator, `EventBuilder`) + 3 fixtures under `tests/fixtures/`. 46 tests pass, ruff clean. **Next: archive change + sync delta specs → main, then start `logic-layer-02`.**
 - `logic-layer-02` — 0/9 (not started; **next implementation target**)
 - `pi-extension-shell-03a` / `03b` — not started
 - `hooks-auto-onboarding-04` — 0/16
@@ -53,6 +53,7 @@ then start `logic-layer-02` (planner + recap).
 - `log-feedback-06` — 0/11 (in-progress status)
 
 ### Archived
+- ✅ `core-foundation-01` — completed & archived to `openspec/changes/archive/2026-08-29-core-foundation-01`; spec synced to `openspec/specs/intent-store/spec.md`.
 - ✅ `pi-extension-shell-03` — completed & archived to `openspec/changes/archive/2026-08-29-pi-extension-shell-03` (superseded by split 03a/03b; its delta specs not synced to main specs since 03a/03b specs replace them).
 
 ## [2026-08-28 22:35] Session Summary — Scaffold core-foundation-01

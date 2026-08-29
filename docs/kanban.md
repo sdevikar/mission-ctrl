@@ -10,7 +10,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 
 | Change | Title | Milestone | Status |
 |---|---|---|---|
-| `core-foundation-01` | Core Foundation | M0 | ✅ Applied |
+| `core-foundation-01` | Core Foundation | M0 | 📦 Archived |
 | `logic-layer-02` | Logic Layer | M1 | 🔲 Planned |
 | ~~`pi-extension-shell-03`~~ | ~~Pi Extension Shell~~ | ~~M2~~ | ⚠️ Superseded (split → 03a/03b) |
 | `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 🔲 Planned |
@@ -36,7 +36,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M0 — Core Foundation (Python, agent-agnostic)
-> OpenSpec: `core-foundation-01` | Status: ✅ Applied (implementation complete; pending archive)
+> OpenSpec: `core-foundation-01` | Status: 📦 Archived (spec synced to openspec/specs/intent-store)
 
 - [x] Scaffold `packages/core` as `mission_ctrl_core` (Python, pyproject.toml, pytest)
 - [x] Root pyproject.toml: uv workspace config (members: packages/*), single uv.lock

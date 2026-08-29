@@ -4,9 +4,9 @@
 - [x] `packages/core` as `mission_ctrl_core` (pyproject.toml, pytest config, local editable install)
 
 ## Models & validation
-- [ ] Pydantic models: mission, mvp, constraints, backlog, specs, meta event
-- [ ] Validation layer with field-level error formatting (file → index → field → value)
-- [ ] Unit tests: 100% model field coverage
+- [x] Pydantic models: mission, mvp, constraints, backlog, specs, meta event
+- [x] Validation layer with field-level error formatting (file → index → field → value)
+- [x] Unit tests: 100% model field coverage
 
 ## Stores
 - [ ] `MissionStore`, `MvpStore`, `ConstraintsStore` (read/write/next_id)

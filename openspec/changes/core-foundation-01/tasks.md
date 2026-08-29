@@ -1,7 +1,7 @@
 # Tasks: Core Foundation (M0) — core-foundation-01
 
 ## Scaffold
-- [ ] `packages/core` as `mission_ctrl_core` (pyproject.toml, pytest config, local editable install)
+- [x] `packages/core` as `mission_ctrl_core` (pyproject.toml, pytest config, local editable install)
 
 ## Models & validation
 - [ ] Pydantic models: mission, mvp, constraints, backlog, specs, meta event

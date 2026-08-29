@@ -1,0 +1,33 @@
+{
+  "nodes": [
+    {
+      "id": "spec_001",
+      "title": "Async export execution",
+      "status": "in_progress",
+      "depends_on": [],
+      "links": {
+        "ideas": [
+          "idea_002"
+        ],
+        "mvp_items": [
+          "mvp_001"
+        ]
+      }
+    },
+    {
+      "id": "spec_002",
+      "title": "Export download endpoint",
+      "status": "draft",
+      "depends_on": [
+        "spec_001"
+      ],
+      "links": {
+        "ideas": [],
+        "mvp_items": [
+          "mvp_002"
+        ]
+      }
+    }
+  ],
+  "updated_at": null
+}

@@ -1,0 +1,70 @@
+{
+  "nodes": [
+    {
+      "id": "spec_001",
+      "title": "Foundation",
+      "status": "done",
+      "depends_on": [],
+      "links": {
+        "ideas": [
+          "idea_001"
+        ],
+        "mvp_items": []
+      }
+    },
+    {
+      "id": "spec_002",
+      "title": "Left branch",
+      "status": "done",
+      "depends_on": [
+        "spec_001"
+      ],
+      "links": {
+        "ideas": [
+          "idea_002"
+        ],
+        "mvp_items": []
+      }
+    },
+    {
+      "id": "spec_003",
+      "title": "Right branch",
+      "status": "design_approved",
+      "depends_on": [
+        "spec_001"
+      ],
+      "links": {
+        "ideas": [
+          "idea_003"
+        ],
+        "mvp_items": []
+      }
+    },
+    {
+      "id": "spec_004",
+      "title": "Blocked merge",
+      "status": "blocked",
+      "depends_on": [
+        "spec_002",
+        "spec_005"
+      ],
+      "links": {
+        "ideas": [],
+        "mvp_items": []
+      }
+    },
+    {
+      "id": "spec_005",
+      "title": "Late dependency",
+      "status": "draft",
+      "depends_on": [
+        "spec_002"
+      ],
+      "links": {
+        "ideas": [],
+        "mvp_items": []
+      }
+    }
+  ],
+  "updated_at": null
+}

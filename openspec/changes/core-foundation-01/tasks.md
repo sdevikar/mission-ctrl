@@ -9,15 +9,15 @@
 - [x] Unit tests: 100% model field coverage
 
 ## Stores
-- [ ] `MissionStore`, `MvpStore`, `ConstraintsStore` (read/write/next_id)
-- [ ] `BacklogStore` (add/update/get/next_id/search)
-- [ ] `SpecStore` (add/update/get/next_id/validate_no_cycles)
-- [ ] `MetaStore` (append/read_since/read_all/next_id)
-- [ ] `IntentStore` orchestrator: `init()`, `get_current_intent()`, `validate_all()`
-- [ ] `EventBuilder`: all v1 event types incl. `SPEC_CREATED`, `SPEC_STATUS_UPDATED`
-- [ ] Store I/O tests: all CRUD ops via tmp_path fixtures
+- [x] `MissionStore`, `MvpStore`, `ConstraintsStore` (read/write/next_id)
+- [x] `BacklogStore` (add/update/get/next_id/search)
+- [x] `SpecStore` (add/update/get/next_id/validate_no_cycles)
+- [x] `MetaStore` (append/read_since/read_all/next_id)
+- [x] `IntentStore` orchestrator: `init()`, `get_current_intent()`, `validate_all()`
+- [x] `EventBuilder`: all v1 event types incl. `SPEC_CREATED`, `SPEC_STATUS_UPDATED`
+- [x] Store I/O tests: all CRUD ops via tmp_path fixtures
 
 ## Shared fixtures
-- [ ] `tests/fixtures/empty-project`
-- [ ] `tests/fixtures/mid-flight` (partial lifecycle state, some events, git history)
-- [ ] `tests/fixtures/complex-graph` (multiple dependency chains, blocked and done specs, cycle-free)
+- [x] `tests/fixtures/empty-project`
+- [x] `tests/fixtures/mid-flight` (partial lifecycle state, some events)
+- [x] `tests/fixtures/complex-graph` (multiple dependency chains, blocked and done specs, cycle-free)

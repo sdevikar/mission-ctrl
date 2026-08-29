@@ -10,7 +10,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 
 | Change | Title | Milestone | Status |
 |---|---|---|---|
-| `core-foundation-01` | Core Foundation | M0 | 🔲 Planned |
+| `core-foundation-01` | Core Foundation | M0 | ✅ Applied |
 | `logic-layer-02` | Logic Layer | M1 | 🔲 Planned |
 | ~~`pi-extension-shell-03`~~ | ~~Pi Extension Shell~~ | ~~M2~~ | ⚠️ Superseded (split → 03a/03b) |
 | `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 🔲 Planned |
@@ -36,20 +36,20 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M0 — Core Foundation (Python, agent-agnostic)
-> OpenSpec: `core-foundation-01` | Status: 🔲 Planned
+> OpenSpec: `core-foundation-01` | Status: ✅ Applied (implementation complete; pending archive)
 
-- [ ] Scaffold `packages/core` as `mission_ctrl_core` (Python, pyproject.toml, pytest)
-- [ ] Root pyproject.toml: uv workspace config (members: packages/*), single uv.lock
-- [ ] pydantic models: mission, mvp, constraints, backlog, specs, meta (with discriminated unions for meta.jsonl)
-- [ ] Validation layer with clear field-level error formatting
-- [ ] `MissionStore`, `MvpStore`, `ConstraintsStore` (read/write/next_id)
-- [ ] `BacklogStore` (add/update/get/next_id/search)
-- [ ] `SpecStore` (add/update/get/next_id/**validate_no_cycles** via `graphlib.TopologicalSorter`)
-- [ ] `MetaStore` (append/read_since/read_all/next_id) — atomic append; discriminated-union deserialization
-- [ ] `IntentStore` orchestrator: `init()`, `get_current_intent()`, `validate_all()`
-- [ ] `EventBuilder`: all v1 event types incl. `SPEC_CREATED`, `SPEC_STATUS_UPDATED`
-- [ ] Unit tests: 100% model field coverage
-- [ ] 3 fixture repos: empty-project, mid-flight, complex-graph
+- [x] Scaffold `packages/core` as `mission_ctrl_core` (Python, pyproject.toml, pytest)
+- [x] Root pyproject.toml: uv workspace config (members: packages/*), single uv.lock
+- [x] pydantic models: mission, mvp, constraints, backlog, specs, meta (with discriminated unions for meta.jsonl)
+- [x] Validation layer with clear field-level error formatting
+- [x] `MissionStore`, `MvpStore`, `ConstraintsStore` (read/write/next_id)
+- [x] `BacklogStore` (add/update/get/next_id/search)
+- [x] `SpecStore` (add/update/get/next_id/**validate_no_cycles** via `graphlib.TopologicalSorter`)
+- [x] `MetaStore` (append/read_since/read_all/next_id) — append-only; discriminated-union deserialization
+- [x] `IntentStore` orchestrator: `init()`, `get_current_intent()`, `validate_all()`
+- [x] `EventBuilder`: all v1 event types incl. `SPEC_CREATED`, `SPEC_STATUS_UPDATED`
+- [x] Unit tests: 100% model field coverage
+- [x] 3 fixture repos: empty-project, mid-flight, complex-graph
 
 **Done when:** can init, read, write, validate all 5 files + meta.jsonl from a script, no agent involved.
 

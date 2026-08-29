@@ -1,0 +1,23 @@
+{
+  "version": "v1.0",
+  "items": [
+    {
+      "id": "mvp_001",
+      "title": "Async export execution",
+      "description": null,
+      "linked_specs": [
+        "spec_001"
+      ]
+    },
+    {
+      "id": "mvp_002",
+      "title": "Export result retrieval",
+      "description": null,
+      "linked_specs": [
+        "spec_002"
+      ]
+    }
+  ],
+  "created_at": "2026-03-10T10:15:00Z",
+  "updated_at": "2026-03-10T10:15:00Z"
+}

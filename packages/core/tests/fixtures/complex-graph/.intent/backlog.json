@@ -1,0 +1,78 @@
+{
+  "items": [
+    {
+      "id": "idea_001",
+      "title": "Foundation",
+      "description": null,
+      "bucket": "mvp_critical",
+      "alignment": {
+        "mission": "strong",
+        "mvp": "required",
+        "constraints": []
+      },
+      "links": {
+        "specs": [
+          "spec_001"
+        ],
+        "mvp_items": []
+      },
+      "created_at": "2026-03-10T10:15:00Z",
+      "updated_at": "2026-03-10T10:15:00Z"
+    },
+    {
+      "id": "idea_002",
+      "title": "Left branch",
+      "description": null,
+      "bucket": "mvp_critical",
+      "alignment": {
+        "mission": "strong",
+        "mvp": "required",
+        "constraints": []
+      },
+      "links": {
+        "specs": [
+          "spec_002"
+        ],
+        "mvp_items": []
+      },
+      "created_at": "2026-03-10T10:15:00Z",
+      "updated_at": "2026-03-10T10:15:00Z"
+    },
+    {
+      "id": "idea_003",
+      "title": "Right branch",
+      "description": null,
+      "bucket": "mvp_critical",
+      "alignment": {
+        "mission": "strong",
+        "mvp": "required",
+        "constraints": []
+      },
+      "links": {
+        "specs": [
+          "spec_003"
+        ],
+        "mvp_items": []
+      },
+      "created_at": "2026-03-10T10:15:00Z",
+      "updated_at": "2026-03-10T10:15:00Z"
+    },
+    {
+      "id": "idea_004",
+      "title": "Parked extra",
+      "description": null,
+      "bucket": "parked",
+      "alignment": {
+        "mission": "weak",
+        "mvp": "not_required",
+        "constraints": []
+      },
+      "links": {
+        "specs": [],
+        "mvp_items": []
+      },
+      "created_at": "2026-03-10T10:15:00Z",
+      "updated_at": "2026-03-10T10:15:00Z"
+    }
+  ]
+}

@@ -5,6 +5,38 @@
 
 ---
 
+## [2026-08-28 22:35] Session Summary — Scaffold core-foundation-01
+
+**OpenSpec change in progress:** `core-foundation-01` (M0 — Core Foundation)
+**Tasks completed this session:**
+- ✅ Updated `AGENTS.md` — condensed from 160→72 lines; added greenfield status,
+  uv workspaces toolchain, and the `.pi/skills/` vs `mission_ctrl_pi` distinction
+- ✅ Scaffolded `packages/core` as `mission_ctrl_core` (pyproject.toml,
+  `__init__.py`, tests package, pytest config)
+- ✅ Root `pyproject.toml` — uv workspace with `members = ["packages/*"]`,
+  dev dependency group (pytest, ruff)
+- ✅ Verified: `uv sync --all-packages` installs all 6 packages (pydantic,
+  pydantic-core, typing-extensions, typing-inspection, annotated-types,
+  mission_ctrl_core); `uv run pytest` collects successfully; `uv run ruff check`
+  passes clean
+- ✅ Committed both changes atomically with format `<change-id>: <description>`
+
+**Key decisions made:**
+- Using `hatchling` as the build backend for the core package (simple, no
+  extra config needed for a pure-Python package)
+- Root project uses `package = false` so it's not installed as a package
+  itself — only workspace members are
+- Added pytest/ruff as root dev dependencies (via `[dependency-groups]`)
+  so `uv sync --all-packages` brings up the full toolchain
+
+**Next session should start with:**
+- The first unchecked task in `core-foundation-01/tasks.md` under "Models &
+  validation" — Pydantic models for mission, mvp, constraints, backlog, specs,
+  meta event (using the data model reference in `docs/design.md` §3–4 and
+  live samples in `docs/examples/`)
+
+---
+
 ## [2026-08-24 22:43] Session Summary — Proposal Review & Restructure
 
 **OpenSpec change in progress:** N/A — this session was meta/planning work  

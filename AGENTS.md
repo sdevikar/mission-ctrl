@@ -45,6 +45,9 @@ changes — they are **not** the `mission_ctrl_pi` package's skills.
   note it in `docs/handoff.md` under "Noticed / Deferred" and keep moving.
 - **Tests before done.** A task isn't done until it has a test (or a documented
   reason why one can't exist).
+- **Update `docs/handoff.md` when an OpenSpec change is completed** (all tasks
+  done + archived) — record what shipped, key decisions, and what's next so the
+  next session picks up cleanly.
 - **Append a session summary to `docs/handoff.md` before stopping.**
 
 ## Never Do These Things

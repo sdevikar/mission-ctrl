@@ -5,6 +5,19 @@
 
 ---
 
+## Status — 2026-08-29
+
+### Active OpenSpec changes (progress)
+- `core-foundation-01` — **in progress**: 4/14 tasks done (package scaffolded, pydantic models + errors layer complete; stores/validation layer still open)
+- `logic-layer-02` — 0/9 (not started)
+- `pi-extension-shell-03a` / `03b` — not started
+- `hooks-auto-onboarding-04` — 0/16
+- `dogfood-ship-v0-1-05` — 0/17
+- `log-feedback-06` — 0/11 (in-progress status)
+
+### Archived
+- ✅ `pi-extension-shell-03` — completed & archived to `openspec/changes/archive/2026-08-29-pi-extension-shell-03` (superseded by split 03a/03b; its delta specs not synced to main specs since 03a/03b specs replace them).
+
 ## [2026-08-28 22:35] Session Summary — Scaffold core-foundation-01
 
 **OpenSpec change in progress:** `core-foundation-01` (M0 — Core Foundation)

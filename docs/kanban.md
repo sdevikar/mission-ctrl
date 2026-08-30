@@ -56,14 +56,14 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M1 — Logic Layer (No LLM calls)
-> OpenSpec: `logic-layer-02` | Status: 🔲 Planned
+> OpenSpec: `logic-layer-02` | Status: 📦 Archived (spec synced to openspec/specs/intent-logic)
 
-- [ ] `planner.py`: `suggest_next()` — MVP-critical first, unblocked, fewest deps, continuity (priority order in design.md)
-- [ ] `RecapResult` Pydantic model (typed output contract consumed by M2b)
-- [ ] `recap.py`: `generate_recap()` → `RecapResult` — mission, MVP %, last focus, changes since, next suggestion
-- [ ] Git read utility: `git log` since timestamp (read-only, no writes; fallback to empty list if no history)
-- [ ] Skip alignment/design as LLM modules — Pi supplies structured input instead
-- [ ] Unit tests: planner never suggests blocked specs; recap correct on all 3 fixtures
+- [x] `planner.py`: `suggest_next()` — MVP-critical first, unblocked, fewest deps, continuity (priority order in design.md)
+- [x] `RecapResult` Pydantic model (typed output contract consumed by M2b)
+- [x] `recap.py`: `generate_recap()` → `RecapResult` — mission, MVP %, last focus, changes since, next suggestion
+- [x] Git read utility: `git log` since timestamp (read-only, no writes; fallback to empty list if no history)
+- [x] Skip alignment/design as LLM modules — Pi supplies structured input instead
+- [x] Unit tests: planner never suggests blocked specs; recap correct on all 3 fixtures
 
 **Done when:** `suggest_next()` and `generate_recap()` produce correct output against fixtures with zero network calls.
 

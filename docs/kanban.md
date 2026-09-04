@@ -18,6 +18,8 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 | `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 📦 Archived |
 | `dogfood-ship-v0-1-05` | Dogfood & Ship v0.1 | M4 | 🔲 Planned |
 | `log-feedback-06` | Feedback Logging Skill | M5-prep | 🔲 Planned |
+| `ts-bridge-07` | TS ↔ Python Bridge (Pi + OpenSpec) | M2x | 🔲 Planned |
+| `claude-plugin-08` | Claude Code Plugin (dogfood vehicle #1) | M2x | 🔲 Planned |
 
 > **Status key:** 🔲 Planned · 🔄 In Progress · ✅ Applied · 📦 Archived · ⚠️ Superseded
 
@@ -25,7 +27,8 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 
 ## Backlog (not this milestone)
 
-- [ ] Claude Code plugin (Node/TS, or Python-to-Node bridge — decide when scheduled)
+- [ ] Claude Code plugin → now `claude-plugin-08` (TS plugin shell over the
+  Python bridge via `ts-bridge-07` — no port; prio #1 for dogfooding)
 - [ ] MCP visual spec graph server
 - [ ] MCP dashboard server
 - [ ] `backlog.merge`, `backlog.archive`, `intent.update` skills

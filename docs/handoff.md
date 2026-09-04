@@ -5,6 +5,26 @@
 
 ---
 
+## [2026-09-04] Session Note — dogfood readiness check + 2 new proposals
+
+**Finding:** pi package is NOT Pi-loadable: Pi 0.84 extensions are TS-only
+(`package.json` + `pi.extensions`, `session_start`/`input` events) — our
+`extension.py` MANIFEST matches no Pi API and `pi install` was never run.
+M2a's distribution "confirmation" was unverified. Python logic itself is
+solid (186 tests). Also open before dogfooding: `log-feedback-06` (0/11)
+and the AGENTS.md-clobber hazard when dogfooding inside this repo.
+
+**New changes (both `openspec validate` clean):**
+- `ts-bridge-07` (0/11): generic Node client + Python stdio server
+  (protocol v1, NDJSON, typed errors) + TS Pi adapter; serves Pi AND
+  OpenSpec integrations with no logic duplication.
+- `claude-plugin-08` (0/15, PRIO #1): Claude Code plugin (skills, hooks,
+  commands) executing through the bridge; blocked on bridge + log-feedback;
+  spike-first (verify 2.1.x schemas), dogfood locally before marketplace.
+
+**Next:** `ts-bridge-07` protocol + server, or `log-feedback-06` first
+(M4 requires it before dogfood week).
+
 ## [2026-09-04] Session Summary — M3 complete: hooks-auto-onboarding-04 archived
 
 **OpenSpec change:** `hooks-auto-onboarding-04` (M3) — **all 20 tasks complete,

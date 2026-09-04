@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-from .hooks import session_start_hook
+from .hooks import before_send_hook, session_start_hook
 from .skills import (
     intent_add_idea,
     intent_design_approve,
@@ -18,19 +18,13 @@ from .skills import (
     intent_triage,
 )
 
-
-def on_before_send_stub(message: str, context: Any = None) -> None:
-    """Stub hook for before send interceptor, to be implemented in M3."""
-    pass
-
-
 MANIFEST: dict[str, Any] = {
     "name": "mission-ctrl",
     "version": "0.1.0",
     "description": "Intent layer extension for Pi coding agent",
     "hooks": {
         "on_session_start": session_start_hook,
-        "on_before_send": on_before_send_stub,
+        "on_before_send": before_send_hook,
     },
     "skills": {
         "intent:init": intent_init,

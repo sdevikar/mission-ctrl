@@ -8,14 +8,14 @@
 - [x] Test: on_session_start no-ops cleanly when `.intent/` is absent (uninitialized project)
 
 ## on_before_send
-- [ ] Hardcoded implementation-intent pattern list (full-word, case-insensitive — see design.md)
-- [ ] Redirect to backlog-add / triage / design-propose depending on current state
-- [ ] One-phrase override to bypass (surfaced in response, never silent)
-- [ ] Log every interception: emit `INTENT_INTERCEPTED` event to meta.jsonl
+- [x] Hardcoded implementation-intent pattern list (full-word, case-insensitive — see design.md)
+- [x] Redirect to backlog-add / triage / design-propose depending on current state
+- [x] One-phrase override to bypass (surfaced in response, never silent)
+- [x] Log every interception: emit `INTENT_INTERCEPTED` event to meta.jsonl
       (fields: pattern_matched, redirect_target, original_message_excerpt)
-- [ ] Log every bypass: emit `INTENT_BYPASS_USED` event to meta.jsonl
+- [x] Log every bypass: emit `INTENT_BYPASS_USED` event to meta.jsonl
       (fields: bypass_phrase, original_message_excerpt)
-- [ ] Add `INTENT_INTERCEPTED` and `INTENT_BYPASS_USED` to `EventBuilder`
+- [x] Add `INTENT_INTERCEPTED` and `INTENT_BYPASS_USED` to `EventBuilder`
       (requires core-foundation-01 extension)
 
 ## AGENTS.md sync

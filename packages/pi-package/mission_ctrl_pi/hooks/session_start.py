@@ -7,12 +7,12 @@ from pathlib import Path
 from typing import Any, Literal
 
 from mission_ctrl_core.logic.recap import RecapResult
-from mission_ctrl_core.models import Actor, SessionRef
 from mission_ctrl_core.stores import IntentStore
 from mission_ctrl_core.stores.base import utcnow
 
 from ..schemas import RecapInput
 from ..skills import intent_recap
+from .hook_common import HOOK_ACTOR, HOOK_SESSION
 
 SessionTier = Literal["skip", "brief", "standard", "full"]
 
@@ -21,9 +21,6 @@ SessionTier = Literal["skip", "brief", "standard", "full"]
 SKIP_UNDER_HOURS = 1.0
 BRIEF_UNDER_HOURS = 8.0
 STANDARD_UNDER_HOURS = 48.0
-
-_HOOK_ACTOR = Actor(type="agent", name="mission-ctrl-hook")
-_HOOK_SESSION = SessionRef(id="ses_0001")
 
 
 def has_intent_dir(root: Path | str) -> bool:
@@ -119,9 +116,9 @@ def on_session_start(
         st.builder().session_started(
             gap_hours=0.0,
             verbosity="full",
-            actor=_HOOK_ACTOR,
+            actor=HOOK_ACTOR,
             reasoning="Session opened with no prior session history.",
-            session=_HOOK_SESSION,
+            session=HOOK_SESSION,
         )
         return result
 
@@ -140,8 +137,8 @@ def on_session_start(
     st.builder().session_started(
         gap_hours=round(gap_hours, 2),
         verbosity=tier,
-        actor=_HOOK_ACTOR,
+        actor=HOOK_ACTOR,
         reasoning=f"Session opened after {gap_hours:.1f}h gap.",
-        session=_HOOK_SESSION,
+        session=HOOK_SESSION,
     )
     return result

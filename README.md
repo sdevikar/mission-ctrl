@@ -15,6 +15,8 @@ and nudge implementation-intent messages back to the backlog-first workflow.
 - [uv](https://docs.astral.sh/uv/) (workspace toolchain)
 - [Pi](https://github.com/anomalyco/opencode) coding agent (for the extension;
   core works standalone)
+- [Claude Code](https://code.claude.com/docs/en/quickstart) 2.x (for the
+  plugin; core works standalone)
 
 ## Installation
 
@@ -27,6 +29,25 @@ For Pi, install the extension from the local path (project-local config with `-l
 
 ```bash
 pi install ./packages/pi-package
+```
+
+For Claude Code, load the plugin from the local path (no install step; local
+copy wins over same-named marketplace copies for that session):
+
+```bash
+claude --plugin-dir ./packages/claude-plugin
+```
+
+Then invoke skills namespaced, e.g. `/mission-ctrl:intent-status` (run
+`/mission-ctrl:intent-init` first in projects without `.intent/`). After
+editing the plugin, `/reload-plugins` picks up changes without a restart.
+The plugin needs the repo's Python env: run `uv sync` once from the repo
+root (the bundled `bin/mission-ctrl` wrapper re-execs through `uv`
+automatically when the system python lacks the deps; set `MISSION_CTRL_ROOT`
+if the plugin ever lives outside this checkout). Validate with:
+
+```bash
+claude plugin validate ./packages/claude-plugin
 ```
 
 Remote distribution (PyPI + npm wrapper) lands with v0.1.0 — see
@@ -52,6 +73,13 @@ intent:next            # ranked next-spec suggestion (MVP-first, unblocked)
 intent:status          # dashboard: mission, MVP %, active specs, next step
 intent:recap           # on-demand recap (brief / standard / full)
 ```
+
+In Claude Code the same skills are namespaced (`/mission-ctrl:intent-init`,
+`/mission-ctrl:intent-add-idea`, … — all 10 loop skills plus a pending
+`intent-log-feedback`, see `packages/claude-plugin/README.md`). Hooks behave
+identically on both hosts: session open injects a gap-tiered recap,
+"implement X" is intercepted with the same redirect ladder and the
+**"override intent"** bypass.
 
 Minimal happy path:
 
@@ -91,9 +119,13 @@ uv run ruff check . && uv run ruff format .  # lint + format
   planner, recap. Deterministic, network-free, no LLM calls.
 - `packages/pi-package` (`mission_ctrl_pi`) — skills, hooks, AGENTS.md sync,
   Jinja2 template.
+- `packages/claude-plugin` — Claude Code plugin (skills, hooks, `bin/`
+  wrapper); prompts + wiring only, executes through the Python packages.
 - `docs/` — `design.md` (source of truth), `architecture.md`, `kanban.md`
   (build status), `handoff.md` (session log), `examples/`.
 - `openspec/` — spec changes (active) and synced capability specs.
 
 Status: M0–M3 implemented and archived (core, logic, Pi extension, hooks).
+Claude plugin (`claude-plugin-08`) implemented 14/16 — pending a live
+`--plugin-dir` dogfood pass and `intent:log-feedback` (`log-feedback-06`).
 Next: feedback-logging skill, then a one-week dogfood + v0.1.0 release.

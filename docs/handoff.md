@@ -5,6 +5,36 @@
 
 ---
 
+## [2026-09-04] Session Summary — claude-plugin-08 implemented (14/16)
+
+**OpenSpec change:** `claude-plugin-08` (PRIO #1) — proposal first aligned
+with upstream plugin docs (skills-only, no `commands/`; `bin/` wrapper;
+`claude plugin validate` gate), then implemented: `packages/claude-plugin/`
+(manifest, 11 SKILL.md, `hooks/hooks.json`, `bin/mission-ctrl`, README) +
+`test_claude_plugin_contracts.py` (7 tests). Commits `583f4a7` → `6652c3e`,
+pushed.
+
+- Wrapper calls skills/hooks in-process (bridge pending) with bridge-shaped
+  ops + error shape; re-execs via `uv run --project` when system python
+  lacks deps (verified with bare `./bin/mission-ctrl`).
+- `hooks.json` uses bare event keys; redirect blocks via
+  `decision:block` + `additionalContext`. `log-feedback` SKILL.md pins the
+  planned contract, marked Pending.
+- Root `pyproject.toml`: workspace members now explicit
+  (`packages/core`, `packages/pi-package`) — the `packages/*` glob broke on
+  the non-Python plugin dir.
+- **193 tests pass; ruff clean; `claude plugin validate` passes (2.1.59);**
+  smoke-tested init → add-idea → intercept/bypass on a temp project.
+- Root README gained the Claude path (`--plugin-dir`, namespaced skills,
+  validate); kanban `claude-plugin-08` → 🔄 In Progress.
+
+**Next:** live dogfood (`claude --plugin-dir`, needs a logged-in session —
+this shell is not authenticated) + `log-feedback-06`, then update kanban
+Claude row/README done-bits and close out the final 2 tasks.
+
+**Noticed / Deferred:** `ts-bridge-07` still 0/11 — when it lands, repoint
+`bin/mission-ctrl` at the server without changing the plugin interface.
+
 ## [2026-09-04] Session Note — dogfood readiness check + 2 new proposals
 
 **Finding:** pi package is NOT Pi-loadable: Pi 0.84 extensions are TS-only

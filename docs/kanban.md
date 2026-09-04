@@ -19,7 +19,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 | `dogfood-ship-v0-1-05` | Dogfood & Ship v0.1 | M4 | 🔲 Planned |
 | `log-feedback-06` | Feedback Logging Skill | M5-prep | 🔲 Planned |
 | `ts-bridge-07` | TS ↔ Python Bridge (Pi + OpenSpec) | M2x | 🔲 Planned |
-| `claude-plugin-08` | Claude Code Plugin (dogfood vehicle #1) | M2x | 🔲 Planned |
+| `claude-plugin-08` | Claude Code Plugin (dogfood vehicle #1) | M2x | 🔄 In Progress (14/16; pending live dogfood + log-feedback-06) |
 
 > **Status key:** 🔲 Planned · 🔄 In Progress · ✅ Applied · 📦 Archived · ⚠️ Superseded
 
@@ -42,7 +42,9 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 > OpenSpec: `core-foundation-01` | Status: 📦 Archived (spec synced to openspec/specs/intent-store)
 
 - [x] Scaffold `packages/core` as `mission_ctrl_core` (Python, pyproject.toml, pytest)
-- [x] Root pyproject.toml: uv workspace config (members: packages/*), single uv.lock
+- [x] Root pyproject.toml: uv workspace config (explicit members:
+  `packages/core`, `packages/pi-package` — non-Python distributables must not
+  match the members glob), single uv.lock
 - [x] pydantic models: mission, mvp, constraints, backlog, specs, meta (with discriminated unions for meta.jsonl)
 - [x] Validation layer with clear field-level error formatting
 - [x] `MissionStore`, `MvpStore`, `ConstraintsStore` (read/write/next_id)

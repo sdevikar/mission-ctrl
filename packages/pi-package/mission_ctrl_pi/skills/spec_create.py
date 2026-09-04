@@ -12,10 +12,12 @@ from mission_ctrl_core.models import (
 )
 from mission_ctrl_core.stores import IntentStore
 
+from ..agents_sync import sync_after_write
 from ..schemas import SkillError, SpecCreateInput, SpecCreateResult
 from .common import get_store, require_initialized
 
 
+@sync_after_write
 def intent_spec_create(
     input: SpecCreateInput,
     store: IntentStore | None = None,

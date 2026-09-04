@@ -5,10 +5,12 @@ from pathlib import Path
 from mission_ctrl_core.models import Actor, SessionRef, SpecStatus
 from mission_ctrl_core.stores import IntentStore
 
+from ..agents_sync import sync_after_write
 from ..schemas import DesignProposeInput, DesignProposeResult, SkillError
 from .common import get_store, require_initialized
 
 
+@sync_after_write
 def intent_design_propose(
     input: DesignProposeInput,
     store: IntentStore | None = None,

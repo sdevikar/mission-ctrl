@@ -19,18 +19,18 @@
       (requires core-foundation-01 extension)
 
 ## AGENTS.md sync
-- [ ] Post-skill hook: regenerate `AGENTS.md` after any `.intent/` write (≤1s)
-- [ ] Jinja2 template: `packages/pi-package/templates/agents_md.jinja2`
-- [ ] Sanitization: escape/strip all user-supplied text fields before rendering;
+- [x] Post-skill hook: regenerate `AGENTS.md` after any `.intent/` write (≤1s)
+- [x] Jinja2 template: `packages/pi-package/templates/agents_md.jinja2`
+- [x] Sanitization: escape/strip all user-supplied text fields before rendering;
       raise `SanitizationError` on prompt-injection patterns (`<!--`, `-->`,
       backtick-fenced blocks with language identifier) — see design.md
-- [ ] Snapshot tests for template output
+- [x] Snapshot tests for template output
 
 ## Tests
-- [ ] Hook behavior tests: all 4 session-gap tier thresholds, pattern matches/
+- [x] Hook behavior tests: all 4 session-gap tier thresholds, pattern matches/
       non-matches, override, bypass logging (temp workspace)
-- [ ] E2E: session open shows recap; "implement X" intercepted on mid-flight fixture;
+- [x] E2E: session open shows recap; "implement X" intercepted on mid-flight fixture;
       `INTENT_INTERCEPTED` event present in meta.jsonl
-- [ ] E2E: bypass detected; `INTENT_BYPASS_USED` event present in meta.jsonl
-- [ ] E2E: skill write updates `AGENTS.md` within 1s
-- [ ] Sanitization test: spec with injection-attempt title renders safely in AGENTS.md
+- [x] E2E: bypass detected; `INTENT_BYPASS_USED` event present in meta.jsonl
+- [x] E2E: skill write updates `AGENTS.md` within 1s
+- [x] Sanitization test: spec with injection-attempt title renders safely in AGENTS.md

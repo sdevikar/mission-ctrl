@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Pi extension and skills for Mission Ctrl"
 requires-python = ">=3.11"
 dependencies = [
+    "jinja2>=3.1.6",
     "mission-ctrl-core",
     "pydantic>=2.0",
 ]

@@ -12,10 +12,12 @@ from mission_ctrl_core.models import (
 from mission_ctrl_core.stores import IntentStore
 from mission_ctrl_core.stores.base import utcnow
 
+from ..agents_sync import sync_after_write
 from ..schemas import InitInput, InitResult, SkillError
 from .common import get_store
 
 
+@sync_after_write
 def intent_init(
     input: InitInput,
     store: IntentStore | None = None,

@@ -234,3 +234,24 @@ def test_session_start_hook_bare_context_never_raises(tmp_path, monkeypatch):
     assert session_start_hook({}) is None
     assert session_start_hook(object()) is None
     assert not (tmp_path / ".intent").exists()
+
+
+def test_e2e_session_open_on_mid_flight_fixture(tmp_path):
+    """E2E: opening the mid-flight project shows a recap and logs the session."""
+    import shutil
+    from pathlib import Path as _Path
+
+    from mission_ctrl_pi.hooks import session_start_hook
+
+    fixtures = _Path(__file__).resolve().parents[2] / "core" / "tests" / "fixtures"
+    shutil.copytree(fixtures / "mid-flight" / ".intent", tmp_path / ".intent")
+    store = IntentStore(tmp_path)
+    before = len(store.meta.read_all())
+
+    result = session_start_hook(str(tmp_path))
+    assert isinstance(result, RecapResult)
+    assert result.last_focus == "spec_001"
+
+    types = [e.event_type for e in store.meta.read_all()]
+    assert len(types) == before + 1
+    assert types[-1] == "SESSION_STARTED"

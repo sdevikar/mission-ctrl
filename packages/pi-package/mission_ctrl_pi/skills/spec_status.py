@@ -10,6 +10,7 @@ from mission_ctrl_core.models import (
 )
 from mission_ctrl_core.stores import IntentStore
 
+from ..agents_sync import sync_after_write
 from ..schemas import SkillError, SpecStatusInput, SpecStatusResult
 from .common import get_store, require_initialized
 
@@ -36,6 +37,7 @@ _ALLOWED_TRANSITIONS: set[tuple[SpecStatus, SpecStatus]] = {
 }
 
 
+@sync_after_write
 def intent_spec_status(
     input: SpecStatusInput,
     store: IntentStore | None = None,

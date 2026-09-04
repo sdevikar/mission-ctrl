@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import shutil
+from pathlib import Path
+
 import pytest
 from mission_ctrl_core.models import SpecStatus
 from mission_ctrl_core.stores import IntentStore
@@ -233,3 +236,38 @@ def test_manifest_before_send_hook_no_ops_without_intent(tmp_path):
     result = hook("implement SSO", {"cwd": str(tmp_path)})
     assert result.action == "proceed"
     assert not (tmp_path / ".intent").exists()
+
+
+# ---------------------------------------------------------------------------
+# E2E on a copied mid-flight fixture (never write to the shared fixture dir)
+# ---------------------------------------------------------------------------
+
+CORE_FIXTURES = Path(__file__).resolve().parents[2] / "core" / "tests" / "fixtures"
+
+
+def _copied_mid_flight(tmp_path) -> IntentStore:
+    shutil.copytree(CORE_FIXTURES / "mid-flight" / ".intent", tmp_path / ".intent")
+    return IntentStore(tmp_path)
+
+
+def test_e2e_intercept_on_mid_flight_fixture(tmp_path):
+    store = _copied_mid_flight(tmp_path)
+    before = len(store.meta.read_all())
+    result = on_before_send("implement the export retry", store=store)
+    assert result.action == "redirect"
+    # No untriaged ideas and no design-approved spec → add-idea.
+    assert result.target == "intent:add-idea"
+    events = store.meta.read_all()
+    assert len(events) == before + 1
+    assert events[-1].event_type == "INTENT_INTERCEPTED"
+    assert events[-1].decision.pattern_matched == "implement"
+
+
+def test_e2e_bypass_on_mid_flight_fixture(tmp_path):
+    store = _copied_mid_flight(tmp_path)
+    before = len(store.meta.read_all())
+    result = on_before_send("override intent: implement it anyway", store=store)
+    assert result.action == "bypass"
+    events = store.meta.read_all()
+    assert len(events) == before + 1
+    assert events[-1].event_type == "INTENT_BYPASS_USED"

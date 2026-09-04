@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""mission-ctrl bridge wrapper (Claude Code plugin runtime).
+
+Prompts and wiring only — all intent logic lives in ``mission_ctrl_core``
+and ``mission_ctrl_pi``. Resolves the monorepo checkout (``MISSION_CTRL_ROOT``
+or the plugin's own location), imports the Python packages from their source
+trees, and dispatches one op per invocation:
+
+- ``skill <name> --cwd DIR`` — run an intent skill; input JSON on stdin,
+  result JSON on stdout, SkillErrors as ``{"code","message"}`` on stderr
+  with exit 1.
+- ``hook session-start`` / ``hook before-send`` — Claude hook entry points;
+  hook event JSON arrives on stdin (per the hooks reference).
+- ``sync agents-md --cwd DIR`` — regenerate AGENTS.md next to ``.intent/``.
+
+When ``ts-bridge-07`` lands, this wrapper is repointed at the bridge server
+without changing the plugin interface (skills, hooks, error shape).
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+
+def _find_repo_root() -> Path:
+    override = os.environ.get("MISSION_CTRL_ROOT")
+    if override:
+        return Path(override)
+    here = Path(__file__).resolve()
+    for candidate in [here.parent.parent.parent, *here.parents[:6]]:
+        if (candidate / "packages" / "core" / "mission_ctrl_core" / "__init__.py").is_file():
+            return candidate
+    raise SystemExit(
+        "error: cannot locate mission-ctrl repo root; set MISSION_CTRL_ROOT "
+        "to the checkout containing packages/core and packages/pi-package"
+    )
+
+
+_REPO_ROOT = _find_repo_root()
+for _pkg in ("packages/core", "packages/pi-package"):
+    _p = str(_REPO_ROOT / _pkg)
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+try:
+    from mission_ctrl_pi import schemas
+    from mission_ctrl_pi import skills
+    from mission_ctrl_pi.agents_sync import write_agents_md
+    from mission_ctrl_core.stores import IntentStore
+    from mission_ctrl_pi.hooks.before_send import on_before_send
+    from mission_ctrl_pi.hooks.session_start import on_session_start
+    from mission_ctrl_pi.schemas import SkillError
+except ImportError as exc:  # pragma: no cover - environment guidance
+    sys.stderr.write(
+        f"error: cannot import mission_ctrl packages ({exc}); "
+        "from the repo root run `uv sync` with Python 3.11+\n"
+    )
+    raise SystemExit(1)
+
+
+# skill-name -> (input model | None, function)
+_SKILLS: dict[str, tuple[type | None, object]] = {
+    "init": (schemas.InitInput, skills.intent_init),
+    "add-idea": (schemas.AddIdeaInput, skills.intent_add_idea),
+    "triage": (schemas.TriageInput, skills.intent_triage),
+    "spec-create": (schemas.SpecCreateInput, skills.intent_spec_create),
+    "spec-status": (schemas.SpecStatusInput, skills.intent_spec_status),
+    "design-propose": (schemas.DesignProposeInput, skills.intent_design_propose),
+    "design-approve": (schemas.DesignApproveInput, skills.intent_design_approve),
+    "recap": (schemas.RecapInput, skills.intent_recap),
+    "next": (None, skills.intent_next),
+    "status": (None, skills.intent_status),
+}
+
+
+def _fail(code: str, message: str) -> int:
+    sys.stderr.write(json.dumps({"code": code, "message": message}) + "\n")
+    return 1
+
+
+def _read_stdin_json() -> dict:
+    raw = sys.stdin.read()
+    if not raw.strip():
+        return {}
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise SkillError("INVALID_INPUT", f"Input is not valid JSON: {exc}")
+    if not isinstance(data, dict):
+        raise SkillError("INVALID_INPUT", "Input JSON must be an object")
+    return data
+
+
+def cmd_skill(name: str, cwd: str) -> int:
+    if name == "log-feedback":
+        return _fail(
+            "NOT_IMPLEMENTED",
+            "intent:log-feedback lands in log-feedback-06 and is not "
+            "implemented yet; log dogfood issues as plain notes for now.",
+        )
+    entry = _SKILLS.get(name)
+    if entry is None:
+        return _fail("INVALID_INPUT", f"Unknown skill: {name}")
+    model_cls, func = entry
+    try:
+        payload = _read_stdin_json()
+        if model_cls is None:
+            if payload:
+                return _fail(
+                    "INVALID_INPUT",
+                    f"intent:{name} takes no input; got keys {sorted(payload)}",
+                )
+            result = func(root=cwd)
+        else:
+            try:
+                validated = model_cls.model_validate(payload)
+            except Exception as exc:
+                return _fail("INVALID_INPUT", f"Input failed validation: {exc}")
+            if name == "recap" and not payload:
+                result = func(root=cwd)
+            else:
+                result = func(validated, root=cwd)
+    except SkillError as exc:
+        return _fail(exc.code, exc.message)
+    except Exception as exc:  # never leak tracebacks across the plugin boundary
+        return _fail("INTERNAL", f"Unexpected error in intent:{name}: {exc}")
+    sys.stdout.write(result.model_dump_json() + "\n")
+    return 0
+
+
+def cmd_hook_session_start() -> int:
+    try:
+        event = _read_stdin_json()
+    except SkillError as exc:
+        return _fail(exc.code, exc.message)
+    cwd = event.get("cwd") or "."
+    try:
+        result = on_session_start(root=cwd)
+    except Exception as exc:
+        return _fail("INTERNAL", f"SessionStart hook failed: {exc}")
+    if result is None:
+        return 0
+    text = result.rendered or result.model_dump_json()
+    sys.stdout.write(text + ("\n" if not text.endswith("\n") else ""))
+    return 0
+
+
+def cmd_hook_before_send() -> int:
+    try:
+        event = _read_stdin_json()
+    except SkillError as exc:
+        return _fail(exc.code, exc.message)
+    prompt = event.get("prompt", "")
+    cwd = event.get("cwd") or "."
+    try:
+        result = on_before_send(prompt, root=cwd)
+    except Exception as exc:
+        return _fail("INTERNAL", f"UserPromptSubmit hook failed: {exc}")
+    if result.action == "proceed":
+        return 0
+    if result.action == "bypass":
+        sys.stdout.write(result.message + "\n")
+        return 0
+    # redirect: block the original prompt, keep the redirect visible to Claude.
+    sys.stdout.write(
+        json.dumps(
+            {
+                "decision": "block",
+                "reason": result.message,
+                "hookSpecificOutput": {
+                    "hookEventName": "UserPromptSubmit",
+                    "additionalContext": (
+                        f"Mission Ctrl intercepted implementation intent "
+                        f"(matched {result.pattern!r}). Route through "
+                        f"{result.target} first. User may re-send with the "
+                        f"phrase 'override intent' to proceed anyway."
+                    ),
+                },
+            }
+        )
+        + "\n"
+    )
+    return 0
+
+
+def cmd_sync_agents_md(cwd: str) -> int:
+    try:
+        store = IntentStore(cwd)
+        path = write_agents_md(store)
+    except SkillError as exc:
+        return _fail(exc.code, exc.message)
+    except Exception as exc:
+        return _fail("INTERNAL", f"AGENTS.md sync failed: {exc}")
+    sys.stdout.write(json.dumps({"agents_md": str(path)}) + "\n")
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(prog="mission-ctrl")
+    sub = parser.add_subparsers(dest="op", required=True)
+
+    p_skill = sub.add_parser("skill")
+    p_skill.add_argument("name")
+    p_skill.add_argument("--cwd", default=".")
+
+    p_hook = sub.add_parser("hook")
+    p_hook.add_argument("event", choices=["session-start", "before-send"])
+
+    p_sync = sub.add_parser("sync")
+    p_sync.add_argument("target", choices=["agents-md"])
+    p_sync.add_argument("--cwd", default=".")
+
+    args = parser.parse_args(argv)
+    if args.op == "skill":
+        return cmd_skill(args.name, args.cwd)
+    if args.op == "hook":
+        if args.event == "session-start":
+            return cmd_hook_session_start()
+        return cmd_hook_before_send()
+    return cmd_sync_agents_md(args.cwd)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

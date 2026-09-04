@@ -1,0 +1,10 @@
+{
+  "name": "mission-ctrl",
+  "description": "Intent layer for coding sessions: backlog, specs, design gate, recaps, and implementation-intent interception",
+  "version": "0.1.0",
+  "author": {
+    "name": "mission-ctrl"
+  },
+  "license": "MIT",
+  "keywords": ["intent", "backlog", "specs", "design-gate", "recap", "hooks"]
+}

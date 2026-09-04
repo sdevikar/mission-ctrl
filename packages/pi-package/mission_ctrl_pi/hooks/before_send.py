@@ -54,15 +54,42 @@ def find_implementation_intent(message: str) -> str | None:
 
 
 def _redirect_target(store: IntentStore) -> tuple[str, str]:
-    """Pick the redirect skill + human detail from current `.intent/` state."""
-    approved = sorted(
-        n.id for n in store.specs.read().nodes if n.status is SpecStatus.DESIGN_APPROVED
-    )
+    """Pick the redirect skill + human detail from current `.intent/` state.
+
+    Closest-to-code first: a ready design-approved spec beats a spec still in
+    the design gate, which beats a triaged idea without a spec, which beats
+    untriaged ideas, which beats a fresh backlog add.
+    """
+    nodes = store.specs.read().nodes
+    approved = sorted(n.id for n in nodes if n.status is SpecStatus.DESIGN_APPROVED)
     if approved:
         extra = f" (+{len(approved) - 1} more)" if len(approved) > 1 else ""
         return (
             "intent:spec-status",
             f"design-approved {approved[0]}{extra} is ready for in_progress",
+        )
+    gated = sorted(
+        n.id
+        for n in nodes
+        if n.status in (SpecStatus.DRAFT, SpecStatus.DESIGN_PROPOSED)
+    )
+    if gated:
+        extra = f" (+{len(gated) - 1} more)" if len(gated) > 1 else ""
+        return (
+            "intent:design-propose",
+            f"spec {gated[0]}{extra} still needs its design proposed/approved",
+        )
+    linked_ideas = {idea for n in nodes for idea in n.links.ideas}
+    specless = [
+        i
+        for i in store.backlog.search(bucket=Bucket.MVP_CRITICAL)
+        if i.id not in linked_ideas
+    ]
+    if specless:
+        extra = f" (+{len(specless) - 1} more)" if len(specless) > 1 else ""
+        return (
+            "intent:spec-create",
+            f"triaged {specless[0].id}{extra} has no spec yet",
         )
     untriaged = store.backlog.search(bucket=Bucket.UNTRIAGED)
     if untriaged:

@@ -178,6 +178,51 @@ def test_approved_design_redirects_to_spec_status(tmp_path):
     assert store.meta.read_all()[-1].decision.redirect_target == "intent:spec-status"
 
 
+def _store_with_draft_spec(tmp_path) -> tuple[IntentStore, str]:
+    store, idea_id = _store_with_untriaged_idea(tmp_path)
+    intent_triage(
+        TriageInput(idea_id=idea_id, bucket="mvp", alignment_verdict="Core"),
+        store=store,
+    )
+    create = intent_spec_create(SpecCreateInput(idea_id=idea_id), store=store)
+    return store, create.spec_id
+
+
+def test_draft_spec_redirects_to_design_propose(tmp_path):
+    store, spec_id = _store_with_draft_spec(tmp_path)
+    result = on_before_send("implement the gated feature", store=store)
+    assert result.action == "redirect"
+    assert result.target == "intent:design-propose"
+    assert spec_id in result.message
+
+
+def test_triaged_idea_without_spec_redirects_to_spec_create(tmp_path):
+    store, idea_id = _store_with_untriaged_idea(tmp_path)
+    intent_triage(
+        TriageInput(idea_id=idea_id, bucket="mvp", alignment_verdict="Core"),
+        store=store,
+    )
+    result = on_before_send("implement the export flow", store=store)
+    assert result.action == "redirect"
+    assert result.target == "intent:spec-create"
+    assert idea_id in result.message
+
+
+def test_approved_spec_beats_draft_spec(tmp_path):
+    store, approved_id = _store_with_approved_design(tmp_path)
+    # Second spec stays draft: add/triage/create a new idea on the same store.
+    add = intent_add_idea(AddIdeaInput(title="Second feature"), store=store)
+    intent_triage(
+        TriageInput(idea_id=add.idea_id, bucket="mvp", alignment_verdict="Core"),
+        store=store,
+    )
+    second = intent_spec_create(SpecCreateInput(idea_id=add.idea_id), store=store)
+    assert second.spec_id != approved_id
+    result = on_before_send("build everything now", store=store)
+    assert result.target == "intent:spec-status"
+    assert approved_id in result.message
+
+
 def test_excerpt_truncated_to_limit(tmp_path):
     store = _init_store(tmp_path)
     long_message = "implement " + "x" * 500
@@ -255,8 +300,9 @@ def test_e2e_intercept_on_mid_flight_fixture(tmp_path):
     before = len(store.meta.read_all())
     result = on_before_send("implement the export retry", store=store)
     assert result.action == "redirect"
-    # No untriaged ideas and no design-approved spec → add-idea.
-    assert result.target == "intent:add-idea"
+    # Draft spec_002 with no approved design → design-propose.
+    assert result.target == "intent:design-propose"
+    assert "spec_002" in result.message
     events = store.meta.read_all()
     assert len(events) == before + 1
     assert events[-1].event_type == "INTENT_INTERCEPTED"

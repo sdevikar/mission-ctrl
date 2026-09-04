@@ -14,15 +14,18 @@ nothing else needs the loop in Claude Code first.
 
 ## What Changes
 
-- New `packages/claude-plugin/` distributable plugin:
+- New `packages/claude-plugin/` distributable plugin (per
+  https://code.claude.com/docs/en/plugins, verified against docs 2026-09-04):
   - `.claude-plugin/plugin.json` + `skills/*/SKILL.md` (one per intent skill:
     init, add-idea, triage, spec-create, spec-status, design-propose,
-    design-approve, next, status, recap, log-feedback) with frontmatter and
-    JSON I/O contracts matching the Python schemas.
+    design-approve, next, status, recap, log-feedback) with frontmatter
+    use-when triggers and JSON I/O contracts matching the Python schemas.
+    No `commands/` directory (legacy upstream — skills only).
   - `hooks/hooks.json`: `SessionStart` → session recap injection,
     `UserPromptSubmit` → implementation-intent interception with the same
     redirect ladder and one-phrase override as the Pi hooks.
-  - `commands/intent-*.md` slash commands for explicit invocation.
+  - `bin/mission-ctrl` wrapper (on the Bash tool PATH while enabled) so
+    skills/hooks invoke the bridge uniformly with no extra runtime deps.
 - Execution via `ts-bridge-07` (hard prerequisite): plugin shell/JS calls go
   through the bridge client + `mission_ctrl_bridge` server, so the plugin
   contains zero intent logic — prompts and wiring only.

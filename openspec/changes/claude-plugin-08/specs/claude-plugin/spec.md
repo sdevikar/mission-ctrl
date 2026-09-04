@@ -49,3 +49,8 @@ publication MUST wait until the dogfood pass succeeds.
   `intent:log-feedback`
 - WHEN the team reviews the feedback
 - THEN marketplace publication is scheduled, not before
+
+#### Scenario: Plugin validates clean
+- GIVEN the plugin directory
+- WHEN `claude plugin validate` runs against it
+- THEN validation passes (warnings allowed until CI enforces `--strict`)

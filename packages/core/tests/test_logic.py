@@ -72,28 +72,44 @@ def test_planner_mvp_linked_ranked_first():
         st = IntentStore(root)
         ts = "2026-03-10T10:15:00Z"
         st.init(
-            mission=Mission(id="mis_001", version="v1.0", statement="m",
-                            success_criteria=[], created_at=ts, updated_at=ts),
-            mvp=Mvp(version="v1.0", items=[MvpItem(id="mvp_001", title="t")],
-                    created_at=ts, updated_at=ts),
-            constraints=Constraints(version="v1.0",
-                                    constraints=[Constraint(id="con_001", rule="r",
-                                                            rationale="r",
-                                                            severity="high")],
-                                    created_at=ts, updated_at=ts),
+            mission=Mission(
+                id="mis_001",
+                version="v1.0",
+                statement="m",
+                success_criteria=[],
+                created_at=ts,
+                updated_at=ts,
+            ),
+            mvp=Mvp(
+                version="v1.0",
+                items=[MvpItem(id="mvp_001", title="t")],
+                created_at=ts,
+                updated_at=ts,
+            ),
+            constraints=Constraints(
+                version="v1.0",
+                constraints=[
+                    Constraint(id="con_001", rule="r", rationale="r", severity="high")
+                ],
+                created_at=ts,
+                updated_at=ts,
+            ),
             actor=Actor(type="human", name="h"),
             session=SessionRef(id="ses_0001"),
         )
         st.specs.write(
-            Specs(nodes=[
-                # A: unblocked, not MVP-linked
-                SpecNode(id="spec_010", title="A"),
-                # B: unblocked, MVP-linked
-                SpecNode(id="spec_020", title="B",
-                         links=SpecLinks(mvp_items=["mvp_001"])),
-                # C: blocked (depends on A, not done)
-                SpecNode(id="spec_030", title="C", depends_on=["spec_010"]),
-            ])
+            Specs(
+                nodes=[
+                    # A: unblocked, not MVP-linked
+                    SpecNode(id="spec_010", title="A"),
+                    # B: unblocked, MVP-linked
+                    SpecNode(
+                        id="spec_020", title="B", links=SpecLinks(mvp_items=["mvp_001"])
+                    ),
+                    # C: blocked (depends on A, not done)
+                    SpecNode(id="spec_030", title="C", depends_on=["spec_010"]),
+                ]
+            )
         )
         recos = suggest_next(st)
         ids = [s.spec_id for s in recos]
@@ -126,26 +142,41 @@ def test_planner_continuity_tie_break():
         st = IntentStore(Path(tmp))
         ts = "2026-03-10T10:15:00Z"
         st.init(
-            mission=Mission(id="mis_001", version="v1.0", statement="m",
-                            success_criteria=[], created_at=ts, updated_at=ts),
+            mission=Mission(
+                id="mis_001",
+                version="v1.0",
+                statement="m",
+                success_criteria=[],
+                created_at=ts,
+                updated_at=ts,
+            ),
             mvp=Mvp(version="v1.0", items=[], created_at=ts, updated_at=ts),
-            constraints=Constraints(version="v1.0", constraints=[],
-                                    created_at=ts, updated_at=ts),
+            constraints=Constraints(
+                version="v1.0", constraints=[], created_at=ts, updated_at=ts
+            ),
             actor=Actor(type="human", name="h"),
             session=SessionRef(id="ses_0001"),
         )
         st.specs.write(
-            Specs(nodes=[
-                # in_progress focus on spec_001 (area: idea_i)
-                SpecNode(id="spec_001", title="Focus", status="in_progress",
-                         links=SpecLinks(ideas=["idea_share"])),
-                # X shares the focus area (idea_share)
-                SpecNode(id="spec_002", title="X",
-                         links=SpecLinks(ideas=["idea_share"])),
-                # Y unrelated
-                SpecNode(id="spec_003", title="Y",
-                         links=SpecLinks(ideas=["idea_other"])),
-            ])
+            Specs(
+                nodes=[
+                    # in_progress focus on spec_001 (area: idea_i)
+                    SpecNode(
+                        id="spec_001",
+                        title="Focus",
+                        status="in_progress",
+                        links=SpecLinks(ideas=["idea_share"]),
+                    ),
+                    # X shares the focus area (idea_share)
+                    SpecNode(
+                        id="spec_002", title="X", links=SpecLinks(ideas=["idea_share"])
+                    ),
+                    # Y unrelated
+                    SpecNode(
+                        id="spec_003", title="Y", links=SpecLinks(ideas=["idea_other"])
+                    ),
+                ]
+            )
         )
         recos = suggest_next(st)
         ids = [s.spec_id for s in recos]
@@ -216,12 +247,19 @@ def test_recap_verbosity_brief_is_shorter():
 # Git utility (real temp repo, read-only assertions)
 # --------------------------------------------------------------------------
 def _git(args: list[str], cwd: Path) -> None:
-    subprocess.run(["git", *args], cwd=cwd, check=True,
-                   capture_output=True, env={**os.environ,
-                                             "GIT_AUTHOR_NAME": "t",
-                                             "GIT_AUTHOR_EMAIL": "t@t",
-                                             "GIT_COMMITTER_NAME": "t",
-                                             "GIT_COMMITTER_EMAIL": "t@t"})
+    subprocess.run(
+        ["git", *args],
+        cwd=cwd,
+        check=True,
+        capture_output=True,
+        env={
+            **os.environ,
+            "GIT_AUTHOR_NAME": "t",
+            "GIT_AUTHOR_EMAIL": "t@t",
+            "GIT_COMMITTER_NAME": "t",
+            "GIT_COMMITTER_EMAIL": "t@t",
+        },
+    )
 
 
 @pytest.fixture
@@ -230,8 +268,13 @@ def repo(tmp_path: Path) -> Path:
     r.mkdir()
     _git(["init"], r)
     for i, day in enumerate(
-        ["2026-01-01T00:00:00Z", "2026-01-02T00:00:00Z",
-         "2026-01-03T00:00:00Z", "2026-01-04T00:00:00Z"], start=1
+        [
+            "2026-01-01T00:00:00Z",
+            "2026-01-02T00:00:00Z",
+            "2026-01-03T00:00:00Z",
+            "2026-01-04T00:00:00Z",
+        ],
+        start=1,
     ):
         (r / f"f{i}.txt").write_text(f"v{i}")
         _git(["add", "."], r)
@@ -240,12 +283,18 @@ def repo(tmp_path: Path) -> Path:
             "GIT_COMMITTER_DATE": day,
         }
         subprocess.run(
-            ["git", "commit", "-m", f"commit {i}"], cwd=r, check=True,
-            capture_output=True, env={**os.environ, **env_dates,
-                                      "GIT_AUTHOR_NAME": "t",
-                                      "GIT_AUTHOR_EMAIL": "t@t",
-                                      "GIT_COMMITTER_NAME": "t",
-                                      "GIT_COMMITTER_EMAIL": "t@t"},
+            ["git", "commit", "-m", f"commit {i}"],
+            cwd=r,
+            check=True,
+            capture_output=True,
+            env={
+                **os.environ,
+                **env_dates,
+                "GIT_AUTHOR_NAME": "t",
+                "GIT_AUTHOR_EMAIL": "t@t",
+                "GIT_COMMITTER_NAME": "t",
+                "GIT_COMMITTER_EMAIL": "t@t",
+            },
         )
     return r
 

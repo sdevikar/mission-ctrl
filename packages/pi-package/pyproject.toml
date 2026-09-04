@@ -1,0 +1,25 @@
+[project]
+name = "mission_ctrl_pi"
+version = "0.1.0"
+description = "Pi extension and skills for Mission Ctrl"
+requires-python = ">=3.11"
+dependencies = [
+    "mission-ctrl-core",
+    "pydantic>=2.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+mission-ctrl-core = { workspace = true }
+
+[tool.hatch.build.targets.wheel]
+packages = ["mission_ctrl_pi"]
+
+[tool.hatch.build.targets.sdist]
+include = ["mission_ctrl_pi"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

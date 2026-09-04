@@ -6,6 +6,7 @@ requires-python = ">=3.11"
 members = [
     "mission-ctrl",
     "mission-ctrl-core",
+    "mission-ctrl-pi",
 ]
 
 [[package]]
@@ -185,6 +186,21 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "pydantic", specifier = ">=2.0" }]
+
+[[package]]
+name = "mission-ctrl-pi"
+version = "0.1.0"
+source = { editable = "packages/pi-package" }
+dependencies = [
+    { name = "mission-ctrl-core" },
+    { name = "pydantic" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "mission-ctrl-core", editable = "packages/core" },
+    { name = "pydantic", specifier = ">=2.0" },
+]
 
 [[package]]
 name = "packaging"

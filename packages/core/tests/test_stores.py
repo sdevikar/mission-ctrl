@@ -278,9 +278,7 @@ def test_meta_store_append_sequential_ids(intent_dir):
     store = MetaStore(intent_dir)
     assert store.next_id() == "evt_000001"
     for _ in range(3):
-        store.append(
-            _intent_event(store.next_id())
-        )
+        store.append(_intent_event(store.next_id()))
     assert store.next_id() == "evt_000004"
     events = store.read_all()
     assert [e.event_id for e in events] == ["evt_000001", "evt_000002", "evt_000003"]
@@ -293,9 +291,7 @@ def test_meta_store_append_sequential_ids(intent_dir):
 def test_meta_store_read_since(intent_dir):
     store = MetaStore(intent_dir)
     for _ in range(3):
-        store.append(
-            _intent_event(store.next_id())
-        )
+        store.append(_intent_event(store.next_id()))
     since_1 = store.read_since("evt_000001")
     assert [e.event_id for e in since_1] == ["evt_000002", "evt_000003"]
     assert store.read_since(None) == store.read_all()

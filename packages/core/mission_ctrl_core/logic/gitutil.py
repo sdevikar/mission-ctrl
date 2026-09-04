@@ -35,11 +35,11 @@ def git_commits_since(root: Path | str, since_iso: str | None) -> list[Commit]:
     root = Path(root)
     if not is_git_repo(root):
         return []
-    argv = ["git", "-C", str(root), "--no-pager", "log",
-            f"--pretty=format:{_GIT_FMT}"]
+    argv = ["git", "-C", str(root), "--no-pager", "log", f"--pretty=format:{_GIT_FMT}"]
     try:
-        proc = subprocess.run(argv, capture_output=True, text=True,
-                              check=False, timeout=15)
+        proc = subprocess.run(
+            argv, capture_output=True, text=True, check=False, timeout=15
+        )
     except (OSError, subprocess.SubprocessError):
         return []
     if proc.returncode != 0:

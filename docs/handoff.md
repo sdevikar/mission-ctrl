@@ -5,6 +5,36 @@
 
 ---
 
+## [2026-09-04] Session Summary — logic-layer-02 complete + pi-extension-shell-03a complete
+
+**OpenSpec changes:** `logic-layer-02` (M1) — **all tasks complete**; `pi-extension-shell-03a` (M2a) — **all tasks complete**.
+
+### logic-layer-02 (M1) — shipped
+- `planner.py`: `suggest_next()` — ranks by MVP-critical → unblocked → fewest deps → continuity
+- `RecapResult` Pydantic model as typed output contract
+- `recap.py`: `generate_recap()` → `RecapResult` (mission, MVP %, last focus, changes since, next suggestion)
+- `gitutil.py`: `git_log_since()` read-only git log utility (fallback to `[]` if no history)
+- Unit tests: planner never suggests blocked specs; recap correct on all 3 fixtures; 46+ tests pass, ruff clean
+- Change archived to `openspec/changes/archive/`; spec synced to `openspec/specs/intent-logic/`
+
+### pi-extension-shell-03a (M2a) — shipped
+- Scaffolded `packages/pi-package` as `mission_ctrl_pi` (Python, depends on `mission_ctrl_core`)
+- `schemas.py`: all SkillInput/SkillOutput Pydantic models (InitInput, AddIdeaInput, TriageInput, SpecCreateInput, SpecStatusInput, NextResult, StatusResult, SkillError)
+- `extension.py`: manifest with `on_session_start` + `on_before_send` hook stubs + 7 core-loop skills
+- All 7 skills implemented: `intent:init`, `intent:add-idea`, `intent:triage`, `intent:spec-create`, `intent:spec-status`, `intent:next`, `intent:status`
+- `intent:spec-status` enforces M2a state machine only; raises `SkillError(ILLEGAL_TRANSITION)` for design-gate states
+- Tests: schema validation, transition legality, E2E lifecycle — **79 tests pass total**
+- `.pi/settings.json`: extension wired to `mission_ctrl_pi.extension`
+- Distribution: pure-Python local install via `pip install -e ./packages/pi-package`
+
+**Key decisions:**
+- Skills use `IntentStore` directly (no bridge, no subprocess, no LLM in core)
+- `SkillError` is returned (not raised) for user-visible errors; Python exceptions propagate for bugs
+- `intent:spec-status` guards design-gate transitions explicitly, making M2b purely additive
+- Distribution confirmed as pure-Python PyPI/pip (no npm wrapper needed)
+
+**Next:** Start `pi-extension-shell-03b` (M2b) — design-gate skills (intent:recap, intent:design-propose, intent:design-approve) + extend spec-status for design_approved → in_progress.
+
 ## [2026-08-29] Session Summary — core-foundation-01 stores + fixtures
 
 **OpenSpec change:** `core-foundation-01` (M0) — now **all 14 tasks complete**.

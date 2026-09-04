@@ -39,16 +39,12 @@ class RecapResult(BaseModel):
 
 
 def _iso(dt: datetime) -> str:
-    return dt.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+    return dt.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _mvp_percent(store) -> tuple[int, int, int]:
     mvp = store.mvp.read()
-    done_specs = {
-        n.id
-        for n in store.specs.read().nodes
-        if n.status is SpecStatus.DONE
-    }
+    done_specs = {n.id for n in store.specs.read().nodes if n.status is SpecStatus.DONE}
     total = len(mvp.items)
     completed = 0
     for item in mvp.items:
@@ -59,11 +55,7 @@ def _mvp_percent(store) -> tuple[int, int, int]:
 
 
 def _events_since(store, since_dt: datetime) -> list[MetaEvent]:
-    return [
-        e
-        for e in store.meta.read_all()
-        if e.timestamp > since_dt
-    ]
+    return [e for e in store.meta.read_all() if e.timestamp > since_dt]
 
 
 def generate_recap(
@@ -109,8 +101,15 @@ def generate_recap(
         git_commits = git_commits_since(root, since_iso) if since_iso else []
 
     recommendations = suggest_next(store)
-    rendered = _render(verbosity, mission.statement, percent, last_focus,
-                       events_since, git_commits, recommendations)
+    rendered = _render(
+        verbosity,
+        mission.statement,
+        percent,
+        last_focus,
+        events_since,
+        git_commits,
+        recommendations,
+    )
     return RecapResult(
         mission=mission.statement,
         mvp_completed=completed,

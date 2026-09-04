@@ -49,9 +49,7 @@ def _mvp(items: list[MvpItem]) -> Mvp:
 
 
 def _constraints(items: list[Constraint]) -> Constraints:
-    return Constraints(
-        version="v1.0", constraints=items, created_at=TS, updated_at=TS
-    )
+    return Constraints(version="v1.0", constraints=items, created_at=TS, updated_at=TS)
 
 
 def _item(
@@ -99,10 +97,16 @@ def _init(root: Path) -> IntentStore:
         mission=_mission(),
         mvp=_mvp(
             [
-                MvpItem(id="mvp_001", title="Async export execution",
-                        linked_specs=["spec_001"]),
-                MvpItem(id="mvp_002", title="Export result retrieval",
-                        linked_specs=["spec_002"]),
+                MvpItem(
+                    id="mvp_001",
+                    title="Async export execution",
+                    linked_specs=["spec_001"],
+                ),
+                MvpItem(
+                    id="mvp_002",
+                    title="Export result retrieval",
+                    linked_specs=["spec_002"],
+                ),
             ]
         ),
         constraints=_constraints(
@@ -131,26 +135,49 @@ def build_mid_flight(root: Path) -> None:
     store.backlog.write(
         Backlog(
             items=[
-                _item("idea_001", "Show export progress bar", Bucket.PARKED,
-                      "weak", "not_required", cons=["con_001"]),
-                _item("idea_002", "Async export queue", Bucket.MVP_CRITICAL,
-                      "strong", "required", specs=["spec_001"]),
+                _item(
+                    "idea_001",
+                    "Show export progress bar",
+                    Bucket.PARKED,
+                    "weak",
+                    "not_required",
+                    cons=["con_001"],
+                ),
+                _item(
+                    "idea_002",
+                    "Async export queue",
+                    Bucket.MVP_CRITICAL,
+                    "strong",
+                    "required",
+                    specs=["spec_001"],
+                ),
             ]
         )
     )
     store.specs.write(
         Specs(
             nodes=[
-                _node("spec_001", "Async export execution", "in_progress",
-                      ideas=["idea_002"], mvp=["mvp_001"]),
-                _node("spec_002", "Export download endpoint", "draft",
-                      deps=["spec_001"], mvp=["mvp_002"]),
+                _node(
+                    "spec_001",
+                    "Async export execution",
+                    "in_progress",
+                    ideas=["idea_002"],
+                    mvp=["mvp_001"],
+                ),
+                _node(
+                    "spec_002",
+                    "Export download endpoint",
+                    "draft",
+                    deps=["spec_001"],
+                    mvp=["mvp_002"],
+                ),
             ]
         )
     )
     builder = store.builder()
     builder.spec_created(
-        "spec_001", "Async export execution",
+        "spec_001",
+        "Async export execution",
         actor=_actor(human=False),
         reasoning="Convert the MVP-critical idea into a tracked spec.",
         session=_session(2),
@@ -158,7 +185,9 @@ def build_mid_flight(root: Path) -> None:
         depends_on=["evt_000001"],
     )
     builder.spec_status_updated(
-        "spec_001", "draft", "in_progress",
+        "spec_001",
+        "draft",
+        "in_progress",
         actor=_actor(human=False),
         reasoning="Start implementation.",
         session=_session(3),
@@ -171,14 +200,33 @@ def build_complex_graph(root: Path) -> None:
     store.backlog.write(
         Backlog(
             items=[
-                _item("idea_001", "Foundation", Bucket.MVP_CRITICAL,
-                      "strong", "required", specs=["spec_001"]),
-                _item("idea_002", "Left branch", Bucket.MVP_CRITICAL,
-                      "strong", "required", specs=["spec_002"]),
-                _item("idea_003", "Right branch", Bucket.MVP_CRITICAL,
-                      "strong", "required", specs=["spec_003"]),
-                _item("idea_004", "Parked extra", Bucket.PARKED,
-                      "weak", "not_required"),
+                _item(
+                    "idea_001",
+                    "Foundation",
+                    Bucket.MVP_CRITICAL,
+                    "strong",
+                    "required",
+                    specs=["spec_001"],
+                ),
+                _item(
+                    "idea_002",
+                    "Left branch",
+                    Bucket.MVP_CRITICAL,
+                    "strong",
+                    "required",
+                    specs=["spec_002"],
+                ),
+                _item(
+                    "idea_003",
+                    "Right branch",
+                    Bucket.MVP_CRITICAL,
+                    "strong",
+                    "required",
+                    specs=["spec_003"],
+                ),
+                _item(
+                    "idea_004", "Parked extra", Bucket.PARKED, "weak", "not_required"
+                ),
             ]
         )
     )
@@ -186,12 +234,26 @@ def build_complex_graph(root: Path) -> None:
         Specs(
             nodes=[
                 _node("spec_001", "Foundation", "done", ideas=["idea_001"]),
-                _node("spec_002", "Left branch", "done", deps=["spec_001"],
-                      ideas=["idea_002"]),
-                _node("spec_003", "Right branch", "design_approved",
-                      deps=["spec_001"], ideas=["idea_003"]),
-                _node("spec_004", "Blocked merge", "blocked", deps=["spec_002",
-                                                                    "spec_005"]),
+                _node(
+                    "spec_002",
+                    "Left branch",
+                    "done",
+                    deps=["spec_001"],
+                    ideas=["idea_002"],
+                ),
+                _node(
+                    "spec_003",
+                    "Right branch",
+                    "design_approved",
+                    deps=["spec_001"],
+                    ideas=["idea_003"],
+                ),
+                _node(
+                    "spec_004",
+                    "Blocked merge",
+                    "blocked",
+                    deps=["spec_002", "spec_005"],
+                ),
                 _node("spec_005", "Late dependency", "draft", deps=["spec_002"]),
             ]
         )

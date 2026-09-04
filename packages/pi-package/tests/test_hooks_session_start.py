@@ -170,3 +170,50 @@ def test_non_skip_tiers_are_read_only_until_task_4(tmp_path):
     before = len(store.meta.read_all())
     on_session_start(store=store, now=T0 + timedelta(hours=10))
     assert len(store.meta.read_all()) == before
+
+
+# ---------------------------------------------------------------------------
+# Manifest wiring: Pi entry point (M3 task 3)
+# ---------------------------------------------------------------------------
+
+
+def test_manifest_session_start_hook_injects_recap(tmp_path):
+    from mission_ctrl_pi.extension import Extension
+
+    store = _init_store(tmp_path)
+    _seed_session(store, utcnow() - timedelta(hours=10))
+    hook = Extension().get_skill("intent:recap")
+    assert hook is not None  # sanity: manifest skills intact
+    session_hook = Extension().hooks["on_session_start"]
+    result = session_hook({"cwd": str(tmp_path)})
+    assert isinstance(result, RecapResult)
+    assert result.mission == "Hooked mission"
+    assert result.verbosity == "standard"
+
+
+def test_manifest_session_start_hook_no_ops_without_intent(tmp_path):
+    from mission_ctrl_pi.extension import Extension
+
+    session_hook = Extension().hooks["on_session_start"]
+    assert session_hook({"cwd": str(tmp_path)}) is None
+    assert not (tmp_path / ".intent").exists()
+
+
+def test_session_start_hook_accepts_path_context(tmp_path):
+    from mission_ctrl_pi.hooks import session_start_hook
+
+    store = _init_store(tmp_path)
+    _seed_session(store, utcnow() - timedelta(hours=10))
+    result = session_start_hook(tmp_path)
+    assert isinstance(result, RecapResult)
+    assert result.verbosity == "standard"
+
+
+def test_session_start_hook_bare_context_never_raises(tmp_path, monkeypatch):
+    from mission_ctrl_pi.hooks import session_start_hook
+
+    monkeypatch.chdir(tmp_path)  # "." has no `.intent/` here
+    assert session_start_hook() is None
+    assert session_start_hook({}) is None
+    assert session_start_hook(object()) is None
+    assert not (tmp_path / ".intent").exists()

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from mission_ctrl_core.logic.recap import RecapResult
 from mission_ctrl_core.stores import IntentStore
@@ -59,6 +59,35 @@ def select_tier(gap_hours: float) -> SessionTier:
     if gap_hours < STANDARD_UNDER_HOURS:
         return "standard"
     return "full"
+
+
+def _root_from_context(context: Any = None) -> Path | str:
+    """Resolve the workspace root Pi opened. Accepts a path, a mapping with
+    a known root key, or an object with a root attribute; defaults to "."."""
+    if context is None:
+        return "."
+    if isinstance(context, (str, Path)):
+        return context
+    if isinstance(context, dict):
+        for key in ("cwd", "root", "project_dir", "workspace"):
+            if context.get(key):
+                return context[key]
+        return "."
+    for attr in ("cwd", "root", "project_dir", "workspace"):
+        value = getattr(context, attr, None)
+        if value:
+            return value
+    return "."
+
+
+def session_start_hook(context: Any = None) -> RecapResult | None:
+    """Pi entry point for `on_session_start` (wired in the manifest).
+
+    Resolves the workspace root from Pi's context and returns the recap for
+    Pi to inject before the user's first message, or None when there is
+    nothing to inject (absent `.intent/` or `skip` tier).
+    """
+    return on_session_start(root=_root_from_context(context))
 
 
 def on_session_start(

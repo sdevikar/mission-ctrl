@@ -354,6 +354,23 @@ def test_event_builder_spec_events(intent_dir):
     assert event.event_type == "SPEC_STATUS_UPDATED"
 
 
+def test_event_builder_session_started(intent_dir):
+    builder = EventBuilder(MetaStore(intent_dir), _linked())
+    event = builder.session_started(
+        gap_hours=10.5,
+        verbosity="standard",
+        actor=_actor(),
+        reasoning="session opened",
+        session=_session(),
+    )
+    assert event.event_type == "SESSION_STARTED"
+    assert event.event_id == "evt_000001"
+    assert event.decision.gap_hours == 10.5
+    assert event.decision.verbosity == "standard"
+    lines = (intent_dir / "meta.jsonl").read_text(encoding="utf-8").splitlines()
+    assert MetaEventAdapter.validate_json(lines[-1]).event_type == "SESSION_STARTED"
+
+
 def test_event_builder_unknown_type_rejected(intent_dir):
     builder = EventBuilder(MetaStore(intent_dir), _linked())
     with pytest.raises(MissionCtrlError, match="unknown event type NOPE"):

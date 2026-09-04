@@ -159,6 +159,31 @@ class EventBuilder:
             **common,
         )
 
+    def session_started(
+        self,
+        *,
+        gap_hours: float,
+        verbosity: str,
+        actor: Actor,
+        reasoning: str,
+        session: SessionRef,
+        **common: Any,
+    ) -> MetaEvent:
+        from ..models import SessionStartedDecision
+
+        return self.build(
+            "SESSION_STARTED",
+            SessionStartedDecision(
+                gap_hours=gap_hours,
+                verbosity=verbosity,
+            ),
+            actor=actor,
+            reasoning=reasoning,
+            affected_entities=[],
+            session=session,
+            **common,
+        )
+
     def design_approved(
         self,
         spec_id: str,

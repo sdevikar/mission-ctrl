@@ -163,13 +163,30 @@ def test_no_session_history_returns_full_recap(tmp_path):
     assert result.verbosity == "full"
 
 
-def test_non_skip_tiers_are_read_only_until_task_4(tmp_path):
-    """Gap recaps must not write until SESSION_STARTED logging lands (task 4)."""
+def test_session_start_appends_session_started(tmp_path):
     store = _init_store(tmp_path)
     _seed_session(store, T0)
     before = len(store.meta.read_all())
-    on_session_start(store=store, now=T0 + timedelta(hours=10))
-    assert len(store.meta.read_all()) == before
+    result = on_session_start(store=store, now=T0 + timedelta(hours=10))
+    assert isinstance(result, RecapResult)
+    events = store.meta.read_all()
+    assert len(events) == before + 1
+    logged = events[-1]
+    assert logged.event_type == "SESSION_STARTED"
+    assert logged.decision.verbosity == "standard"
+    assert logged.decision.gap_hours == pytest.approx(10.0)
+    assert logged.actor.type == "agent"
+
+
+def test_session_start_no_history_logs_zero_gap_full(tmp_path):
+    store = _init_store(tmp_path)
+    (tmp_path / ".intent" / "meta.jsonl").unlink()
+    result = on_session_start(store=store, now=T0)
+    assert isinstance(result, RecapResult)
+    assert result.verbosity == "full"
+    events = store.meta.read_all()
+    assert [e.event_type for e in events] == ["SESSION_STARTED"]
+    assert events[0].decision.gap_hours == 0.0
 
 
 # ---------------------------------------------------------------------------

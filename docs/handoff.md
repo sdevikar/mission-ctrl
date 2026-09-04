@@ -5,6 +5,32 @@
 
 ---
 
+## [2026-09-04] Session Summary — M3 complete: hooks-auto-onboarding-04 archived
+
+**OpenSpec change:** `hooks-auto-onboarding-04` (M3) — **all 20 tasks complete,
+archived** to `openspec/changes/archive/2026-09-04-hooks-auto-onboarding-04`;
+delta spec synced to `openspec/specs/pi-hooks/spec.md` (flattened, no markers).
+
+- `mission_ctrl_pi/hooks/`: `session_start.py` (`has_intent_dir`, 4 gap tiers
+  as constants, `SESSION_STARTED` logging, context-resolving manifest entry),
+  `before_send.py` (6 hardcoded patterns, full-word case-insensitive,
+  5-level redirect: spec-status → design-propose → spec-create → triage →
+  add-idea, `override intent` bypass, both events logged), `hook_common.py`
+  (shared agent actor/session).
+- Core: `EventBuilder.session_started/intent_intercepted/intent_bypass_used` +
+  3 new event types in the discriminated union.
+- AGENTS.md sync: `agents_sync.py` (`SanitizationError`, Jinja2 template at
+  spec'd path, `sync_after_write` decorator on all 7 write skills); jinja2
+  added to pi-package deps. Backlog item titles don't render (template shows
+  counts only) — injection tests use spec titles / mission instead.
+- Noted: delta-spec scenario "no direct .intent/ writes from hook code" vs
+  tasks.md-mandated event logging — hooks write events only via EventBuilder,
+  never state transitions; logged as accepted interpretation.
+- **186 tests pass; ruff check + format clean.** Kanban M3 → 📦 Archived.
+
+**Next:** `log-feedback-06` (M5-prep, 0/11 — implement before M4 dogfood week),
+then `dogfood-ship-v0-1-05` (M4).
+
 ## [2026-09-04] Session Start — M3 (hooks-auto-onboarding-04)
 
 Starting `hooks-auto-onboarding-04` (20 tasks, all unchecked). Read proposal +

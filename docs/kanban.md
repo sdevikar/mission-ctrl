@@ -15,7 +15,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 | ~~`pi-extension-shell-03`~~ | ~~Pi Extension Shell~~ | ~~M2~~ | ⚠️ Superseded (split → 03a/03b) |
 | `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 📦 Archived |
 | `pi-extension-shell-03b` | Pi Extension Shell — Design Gate | M2b | 📦 Archived |
-| `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 🔄 In Progress |
+| `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 📦 Archived |
 | `dogfood-ship-v0-1-05` | Dogfood & Ship v0.1 | M4 | 🔲 Planned |
 | `log-feedback-06` | Feedback Logging Skill | M5-prep | 🔲 Planned |
 
@@ -105,18 +105,18 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M3 — Hooks & Auto-Onboarding
-> OpenSpec: `hooks-auto-onboarding-04` | Status: 🔄 In Progress
+> OpenSpec: `hooks-auto-onboarding-04` | Status: 📦 Archived (spec synced to openspec/specs/pi-hooks)
 
-- [ ] `on_session_start` hook: detect `.intent/` presence; no-op if absent; session-gap → verbosity tier (4 tiers per design.md)
-- [ ] Inject recap before user's first message; append `SESSION_STARTED` event
-- [ ] `on_before_send` hook: hardcoded pattern list (full-word, case-insensitive)
-- [ ] `on_before_send`: redirect to backlog-add / triage / design-propose depending on state
-- [ ] `on_before_send`: one-phrase override to bypass (surfaced, never silent)
-- [ ] Log interceptions: `INTENT_INTERCEPTED` event to meta.jsonl
-- [ ] Log bypasses: `INTENT_BYPASS_USED` event to meta.jsonl
-- [ ] Post-skill hook: regenerate `AGENTS.md` after any `.intent/` write (≤1s)
-- [ ] Jinja2 AGENTS.md template + sanitization (escape user-supplied fields; reject injection patterns)
-- [ ] Snapshot tests for AGENTS.md template output
+- [x] `on_session_start` hook: detect `.intent/` presence; no-op if absent; session-gap → verbosity tier (4 tiers per design.md)
+- [x] Inject recap before user's first message; append `SESSION_STARTED` event
+- [x] `on_before_send` hook: hardcoded pattern list (full-word, case-insensitive)
+- [x] `on_before_send`: redirect to backlog-add / triage / design-propose depending on state
+- [x] `on_before_send`: one-phrase override to bypass (surfaced, never silent)
+- [x] Log interceptions: `INTENT_INTERCEPTED` event to meta.jsonl
+- [x] Log bypasses: `INTENT_BYPASS_USED` event to meta.jsonl
+- [x] Post-skill hook: regenerate `AGENTS.md` after any `.intent/` write (≤1s)
+- [x] Jinja2 AGENTS.md template + sanitization (escape user-supplied fields; reject injection patterns)
+- [x] Snapshot tests for AGENTS.md template output
 
 **Done when:** opening a project with `.intent/` auto-shows recap; "implement X" gets intercepted correctly with event logged; any skill write updates `AGENTS.md` within 1s.
 

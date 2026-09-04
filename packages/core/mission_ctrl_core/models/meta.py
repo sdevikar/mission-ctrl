@@ -115,6 +115,21 @@ class SessionStartedDecision(BaseModel):
     verbosity: str
 
 
+class IntentInterceptedDecision(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    pattern_matched: str
+    redirect_target: str
+    original_message_excerpt: str
+
+
+class IntentBypassUsedDecision(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    bypass_phrase: str
+    original_message_excerpt: str
+
+
 class IntentCreatedEvent(EventBase):
     event_type: Literal["INTENT_CREATED"]
     decision: IntentCreatedDecision
@@ -155,6 +170,16 @@ class SessionStartedEvent(EventBase):
     decision: SessionStartedDecision
 
 
+class IntentInterceptedEvent(EventBase):
+    event_type: Literal["INTENT_INTERCEPTED"]
+    decision: IntentInterceptedDecision
+
+
+class IntentBypassUsedEvent(EventBase):
+    event_type: Literal["INTENT_BYPASS_USED"]
+    decision: IntentBypassUsedDecision
+
+
 MetaEvent = Annotated[
     Union[
         IntentCreatedEvent,
@@ -164,6 +189,8 @@ MetaEvent = Annotated[
         SpecStatusUpdatedEvent,
         DesignProposedEvent,
         DesignApprovedEvent,
+        IntentInterceptedEvent,
+        IntentBypassUsedEvent,
         SessionStartedEvent,
     ],
     Field(discriminator="event_type"),

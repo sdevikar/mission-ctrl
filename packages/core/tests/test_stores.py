@@ -371,6 +371,35 @@ def test_event_builder_session_started(intent_dir):
     assert MetaEventAdapter.validate_json(lines[-1]).event_type == "SESSION_STARTED"
 
 
+def test_event_builder_intercept_and_bypass_events(intent_dir):
+    builder = EventBuilder(MetaStore(intent_dir), _linked())
+    intercepted = builder.intent_intercepted(
+        pattern_matched="implement",
+        redirect_target="intent:add-idea",
+        original_message_excerpt="implement SSO login",
+        actor=_actor(),
+        reasoning="implementation intent detected",
+        session=_session(),
+    )
+    assert intercepted.event_type == "INTENT_INTERCEPTED"
+    assert intercepted.event_id == "evt_000001"
+    assert intercepted.decision.pattern_matched == "implement"
+    assert intercepted.decision.redirect_target == "intent:add-idea"
+    bypassed = builder.intent_bypass_used(
+        bypass_phrase="override intent",
+        original_message_excerpt="override intent: just do it",
+        actor=_actor(),
+        reasoning="bypass phrase detected",
+        session=_session(),
+    )
+    assert bypassed.event_type == "INTENT_BYPASS_USED"
+    assert bypassed.event_id == "evt_000002"
+    assert bypassed.decision.bypass_phrase == "override intent"
+    lines = (intent_dir / "meta.jsonl").read_text(encoding="utf-8").splitlines()
+    assert MetaEventAdapter.validate_json(lines[0]).event_type == "INTENT_INTERCEPTED"
+    assert MetaEventAdapter.validate_json(lines[1]).event_type == "INTENT_BYPASS_USED"
+
+
 def test_event_builder_unknown_type_rejected(intent_dir):
     builder = EventBuilder(MetaStore(intent_dir), _linked())
     with pytest.raises(MissionCtrlError, match="unknown event type NOPE"):

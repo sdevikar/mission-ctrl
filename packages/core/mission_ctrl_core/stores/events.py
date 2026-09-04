@@ -10,7 +10,9 @@ from ..models import (
     DesignApprovedEvent,
     DesignProposedEvent,
     EntityRef,
+    IntentBypassUsedEvent,
     IntentCreatedEvent,
+    IntentInterceptedEvent,
     LinkedIntent,
     MetaEvent,
     SessionRef,
@@ -29,6 +31,8 @@ _EVENT_CLASSES: dict[str, type] = {
     "DESIGN_PROPOSED": DesignProposedEvent,
     "DESIGN_APPROVED": DesignApprovedEvent,
     "SESSION_STARTED": SessionStartedEvent,
+    "INTENT_INTERCEPTED": IntentInterceptedEvent,
+    "INTENT_BYPASS_USED": IntentBypassUsedEvent,
 }
 
 
@@ -207,6 +211,58 @@ class EventBuilder:
             actor=actor,
             reasoning=reasoning,
             affected_entities=[EntityRef(type="spec", id=spec_id)],
+            session=session,
+            **common,
+        )
+
+    def intent_intercepted(
+        self,
+        *,
+        pattern_matched: str,
+        redirect_target: str,
+        original_message_excerpt: str,
+        actor: Actor,
+        reasoning: str,
+        session: SessionRef,
+        **common: Any,
+    ) -> MetaEvent:
+        from ..models import IntentInterceptedDecision
+
+        return self.build(
+            "INTENT_INTERCEPTED",
+            IntentInterceptedDecision(
+                pattern_matched=pattern_matched,
+                redirect_target=redirect_target,
+                original_message_excerpt=original_message_excerpt,
+            ),
+            actor=actor,
+            reasoning=reasoning,
+            affected_entities=[],
+            session=session,
+            **common,
+        )
+
+    def intent_bypass_used(
+        self,
+        *,
+        bypass_phrase: str,
+        original_message_excerpt: str,
+        actor: Actor,
+        reasoning: str,
+        session: SessionRef,
+        **common: Any,
+    ) -> MetaEvent:
+        from ..models import IntentBypassUsedDecision
+
+        return self.build(
+            "INTENT_BYPASS_USED",
+            IntentBypassUsedDecision(
+                bypass_phrase=bypass_phrase,
+                original_message_excerpt=original_message_excerpt,
+            ),
+            actor=actor,
+            reasoning=reasoning,
+            affected_entities=[],
             session=session,
             **common,
         )

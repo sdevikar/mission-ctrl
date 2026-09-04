@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
+from mission_ctrl_core.logic.recap import RecapResult
 from mission_ctrl_core.models import SpecStatus
 from mission_ctrl_core.stores import IntentStore
 from mission_ctrl_pi.schemas import (
@@ -302,3 +305,66 @@ def test_spec_status_design_proposed_not_allowed_to_in_progress_directly(
             store=store,
         )
     assert exc.value.code == "ILLEGAL_TRANSITION"
+
+
+# ---------------------------------------------------------------------------
+# intent:recap across all core fixtures × verbosity tiers
+# ---------------------------------------------------------------------------
+
+CORE_FIXTURES = Path(__file__).resolve().parents[2] / "core" / "tests" / "fixtures"
+FIXTURE_NAMES = ["empty-project", "mid-flight", "complex-graph"]
+VERBOSITIES = ["brief", "standard", "full"]
+
+EXPECTED_FOCUS = {
+    "empty-project": None,
+    "mid-flight": "spec_001",
+    "complex-graph": None,
+}
+
+
+@pytest.mark.parametrize("verbosity", VERBOSITIES)
+@pytest.mark.parametrize("fixture_name", FIXTURE_NAMES)
+def test_recap_fixture_matrix(fixture_name, verbosity):
+    store = IntentStore(CORE_FIXTURES / fixture_name)
+    events_before = len(store.meta.read_all())
+
+    result = intent_recap(RecapInput(verbosity=verbosity), store=store)
+
+    assert isinstance(result, RecapResult)
+    assert result.verbosity == verbosity
+    assert result.mission == store.mission.read().statement
+    assert result.last_focus == EXPECTED_FOCUS[fixture_name]
+    assert "Mission:" in result.rendered
+    assert "MVP" in result.rendered
+    # Fixture dirs are shared repo files; recap must not write to them.
+    assert len(store.meta.read_all()) == events_before
+
+
+def test_recap_empty_project_details():
+    store = IntentStore(CORE_FIXTURES / "empty-project")
+    result = intent_recap(store=store)
+    assert result.last_focus is None
+    assert result.last_focus_status is None
+    assert result.recommendations == []
+    assert (result.mvp_completed, result.mvp_total, result.mvp_percent) == (0, 2, 0)
+
+
+def test_recap_mid_flight_details():
+    store = IntentStore(CORE_FIXTURES / "mid-flight")
+    result = intent_recap(store=store)
+    assert result.last_focus == "spec_001"
+    assert result.last_focus_status == "in_progress"
+    assert (result.mvp_completed, result.mvp_total, result.mvp_percent) == (0, 2, 0)
+    # spec_002 is draft but depends on in-progress spec_001 → nothing suggested
+    assert result.recommendations == []
+
+
+def test_recap_complex_graph_details():
+    store = IntentStore(CORE_FIXTURES / "complex-graph")
+    result = intent_recap(store=store)
+    assert result.last_focus is None
+    # Both linked specs are done → MVP complete
+    assert (result.mvp_completed, result.mvp_total, result.mvp_percent) == (2, 2, 100)
+    # spec_003 (design_approved) and spec_005 (draft) are unblocked; spec_004
+    # is blocked and done specs are never suggested
+    assert [r.spec_id for r in result.recommendations] == ["spec_003", "spec_005"]

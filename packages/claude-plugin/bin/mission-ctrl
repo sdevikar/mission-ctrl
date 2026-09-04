@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 
@@ -49,17 +50,35 @@ for _pkg in ("packages/core", "packages/pi-package"):
         sys.path.insert(0, _p)
 
 try:
-    from mission_ctrl_pi import schemas
-    from mission_ctrl_pi import skills
-    from mission_ctrl_pi.agents_sync import write_agents_md
     from mission_ctrl_core.stores import IntentStore
+    from mission_ctrl_pi import schemas, skills
+    from mission_ctrl_pi.agents_sync import write_agents_md
     from mission_ctrl_pi.hooks.before_send import on_before_send
     from mission_ctrl_pi.hooks.session_start import on_session_start
     from mission_ctrl_pi.schemas import SkillError
-except ImportError as exc:  # pragma: no cover - environment guidance
+except ImportError:
+    # System python lacks the deps (e.g. pydantic): re-exec through the
+    # repo's uv environment so hooks/skills work under a plain `claude`
+    # session. MISSION_CTRL_ROOT must resolve (checked above).
+    if os.environ.get("MISSION_CTRL_UV_EXEC") != "1":
+        uv = shutil.which("uv")
+        if uv is not None:
+            os.environ["MISSION_CTRL_UV_EXEC"] = "1"
+            os.execvpe(
+                uv,
+                [
+                    uv,
+                    "run",
+                    "--project",
+                    str(_REPO_ROOT),
+                    str(Path(__file__).resolve()),
+                    *sys.argv[1:],
+                ],
+                os.environ,
+            )
     sys.stderr.write(
-        f"error: cannot import mission_ctrl packages ({exc}); "
-        "from the repo root run `uv sync` with Python 3.11+\n"
+        "error: cannot import mission_ctrl packages and no `uv` fallback "
+        "available; from the repo root run `uv sync` with Python 3.11+\n"
     )
     raise SystemExit(1)
 

@@ -32,7 +32,9 @@ def _find_repo_root() -> Path:
         return Path(override)
     here = Path(__file__).resolve()
     for candidate in [here.parent.parent.parent, *here.parents[:6]]:
-        if (candidate / "packages" / "core" / "mission_ctrl_core" / "__init__.py").is_file():
+        if (
+            candidate / "packages" / "core" / "mission_ctrl_core" / "__init__.py"
+        ).is_file():
             return candidate
     raise SystemExit(
         "error: cannot locate mission-ctrl repo root; set MISSION_CTRL_ROOT "

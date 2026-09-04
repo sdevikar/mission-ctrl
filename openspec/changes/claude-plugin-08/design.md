@@ -74,12 +74,24 @@ plugin reuses it, does not reimplement it).
   claude.ai organization-settings route forbids top-level `bin/` — not our
   path.)
 
-## Transport decision (spike pre-resolved from docs)
+## Transport decision (spike resolved during implementation)
 
-`bin/mission-ctrl` is a shell wrapper that execs the Python bridge server
-directly — no Node runtime needed in plugin scope, no `jq` needed (stdin
-JSON parsed with Python stdlib). The remaining spike item is confirming the
-exact `hooks.json` matcher schema against the installed 2.1.x CLI.
+`bin/mission-ctrl` is a stdlib-only Python script that imports
+`mission_ctrl_core` / `mission_ctrl_pi` from the checkout's source trees
+(`MISSION_CTRL_ROOT` override supported) — no Node runtime, no `jq` (hook
+stdin JSON parsed with stdlib). It does NOT go through `ts-bridge-07` yet:
+the bridge server doesn't exist, so the wrapper calls skills/hooks
+in-process with identical op shape (`skill`, `hook session-start`,
+`hook before-send`, `sync agents-md`) and identical error shape
+(stderr `{"code","message"}` + non-zero exit). When the bridge lands, the
+wrapper is repointed at the server without changing the plugin interface.
+
+`hooks.json` schema confirmed against the hooks reference + official
+examples: bare top-level event keys (no `{"hooks": {...}}` wrapper — that
+shape is for settings.json), `{"type":"command"}` entries,
+`${CLAUDE_PLUGIN_ROOT}` for script paths. SessionStart supports command
+hooks (stdout becomes context, no blocking); UserPromptSubmit blocks via
+`{"decision":"block","reason"}` JSON (+`additionalContext`), exit 0.
 
 ## Local verification loop (from upstream docs)
 

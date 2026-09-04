@@ -1,0 +1,24 @@
+{
+  "SessionStart": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/bin/mission-ctrl hook session-start",
+          "timeout": 30
+        }
+      ]
+    }
+  ],
+  "UserPromptSubmit": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "${CLAUDE_PLUGIN_ROOT}/bin/mission-ctrl hook before-send",
+          "timeout": 30
+        }
+      ]
+    }
+  ]
+}

@@ -98,3 +98,53 @@ class StatusResult(BaseModel):
     mvp_completion_pct: float
     active_specs: list[SpecSummary]
     next_suggestion: NextResult
+
+
+# ---------------------------------------------------------------------------
+# M2b: Design-gate schemas
+# ---------------------------------------------------------------------------
+
+# RecapResult is the canonical typed output — imported from core, not redefined.
+from mission_ctrl_core.logic.recap import RecapResult as RecapResult  # noqa: E402,F401
+
+
+class RecapInput(BaseModel):
+    """Input for intent:recap skill."""
+
+    model_config = ConfigDict(extra="forbid")
+    verbosity: Literal["brief", "standard", "full"] | None = None
+    since_iso: str | None = None
+
+
+class DesignProposeInput(BaseModel):
+    """Input for intent:design-propose skill."""
+
+    model_config = ConfigDict(extra="forbid")
+    spec_id: str
+    digest: str = Field(min_length=10)
+
+
+class DesignProposeResult(BaseModel):
+    """Output of intent:design-propose skill."""
+
+    model_config = ConfigDict(extra="forbid")
+    spec_id: str
+    status: Literal["design_proposed"] = "design_proposed"
+
+
+class DesignApproveInput(BaseModel):
+    """Input for intent:design-approve skill."""
+
+    model_config = ConfigDict(extra="forbid")
+    spec_id: str
+    decision: Literal["approved", "rejected"]
+    notes: str | None = None
+
+
+class DesignApproveResult(BaseModel):
+    """Output of intent:design-approve skill."""
+
+    model_config = ConfigDict(extra="forbid")
+    spec_id: str
+    decision: str
+    new_status: Literal["design_approved", "draft"]

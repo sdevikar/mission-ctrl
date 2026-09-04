@@ -131,3 +131,57 @@ class EventBuilder:
             session=session,
             **common,
         )
+
+    def design_proposed(
+        self,
+        spec_id: str,
+        digest: str,
+        *,
+        actor: Actor,
+        reasoning: str,
+        session: SessionRef,
+        **common: Any,
+    ) -> MetaEvent:
+        from ..models import DesignProposedDecision
+
+        return self.build(
+            "DESIGN_PROPOSED",
+            DesignProposedDecision(
+                digest_id=digest[:64],  # store first 64 chars as digest_id summary
+                key_choices=[],
+                risks=[],
+                open_questions=[],
+            ),
+            actor=actor,
+            reasoning=reasoning,
+            affected_entities=[EntityRef(type="spec", id=spec_id)],
+            session=session,
+            **common,
+        )
+
+    def design_approved(
+        self,
+        spec_id: str,
+        *,
+        approval: bool,
+        notes: str | None,
+        actor: Actor,
+        reasoning: str,
+        session: SessionRef,
+        **common: Any,
+    ) -> MetaEvent:
+        from ..models import DesignApprovedDecision
+
+        return self.build(
+            "DESIGN_APPROVED",
+            DesignApprovedDecision(
+                digest_id="",
+                approval=approval,
+                notes=notes,
+            ),
+            actor=actor,
+            reasoning=reasoning,
+            affected_entities=[EntityRef(type="spec", id=spec_id)],
+            session=session,
+            **common,
+        )

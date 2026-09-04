@@ -22,13 +22,17 @@ _STATUS_MAP: dict[str, SpecStatus] = {
     "blocked": SpecStatus.BLOCKED,
 }
 
-_ALLOWED_M2A_TRANSITIONS: set[tuple[SpecStatus, SpecStatus]] = {
+_ALLOWED_TRANSITIONS: set[tuple[SpecStatus, SpecStatus]] = {
+    # M2a paths
     (SpecStatus.DRAFT, SpecStatus.IN_PROGRESS),
     (SpecStatus.DRAFT, SpecStatus.BLOCKED),
     (SpecStatus.IN_PROGRESS, SpecStatus.DONE),
     (SpecStatus.IN_PROGRESS, SpecStatus.BLOCKED),
     (SpecStatus.BLOCKED, SpecStatus.IN_PROGRESS),
     (SpecStatus.BLOCKED, SpecStatus.DONE),
+    # M2b path: design gate → in_progress
+    (SpecStatus.DESIGN_APPROVED, SpecStatus.IN_PROGRESS),
+    (SpecStatus.DESIGN_APPROVED, SpecStatus.BLOCKED),
 }
 
 
@@ -59,9 +63,7 @@ def intent_spec_status(
 
     curr = spec.status
     transitions = (
-        allowed_transitions
-        if allowed_transitions is not None
-        else _ALLOWED_M2A_TRANSITIONS
+        allowed_transitions if allowed_transitions is not None else _ALLOWED_TRANSITIONS
     )
     if (curr, target) not in transitions:
         raise SkillError(

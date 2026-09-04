@@ -2,7 +2,7 @@
 
 ## on_session_start
 - [x] Detect `.intent/` presence; no-op gracefully if `.intent/` is absent
-- [ ] Session-gap detection + verbosity tier selection (thresholds in design.md)
+- [x] Session-gap detection + verbosity tier selection (thresholds in design.md)
 - [ ] Inject recap before the user's first message
 - [ ] Append `SESSION_STARTED` event
 - [x] Test: on_session_start no-ops cleanly when `.intent/` is absent (uninitialized project)

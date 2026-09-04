@@ -14,7 +14,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 | `logic-layer-02` | Logic Layer | M1 | 🔲 Planned |
 | ~~`pi-extension-shell-03`~~ | ~~Pi Extension Shell~~ | ~~M2~~ | ⚠️ Superseded (split → 03a/03b) |
 | `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 🔲 Planned |
-| `pi-extension-shell-03b` | Pi Extension Shell — Design Gate | M2b | 🔲 Planned |
+| `pi-extension-shell-03b` | Pi Extension Shell — Design Gate | M2b | 🔄 In Progress |
 | `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 🔲 Planned |
 | `dogfood-ship-v0-1-05` | Dogfood & Ship v0.1 | M4 | 🔲 Planned |
 | `log-feedback-06` | Feedback Logging Skill | M5-prep | 🔲 Planned |
@@ -91,7 +91,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M2b — Pi Extension Shell: Design Gate (3 skills)
-> OpenSpec: `pi-extension-shell-03b` | Status: 🔲 Planned
+> OpenSpec: `pi-extension-shell-03b` | Status: 🔄 In Progress
 
 - [ ] Add design-gate schemas to `schemas.py` (RecapInput, DesignProposeInput, DesignApproveInput, etc.)
 - [ ] `intent:recap` — on-demand recap; optional verbosity override; returns `RecapResult`

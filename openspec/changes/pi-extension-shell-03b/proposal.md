@@ -21,8 +21,9 @@ can't safely advance to in_progress without a design gate.
     `RecapResult`
   - `intent:design-propose` — takes Pi-supplied digest text; transitions spec
     draft → design_proposed; emits `DESIGN_PROPOSED`
-  - `intent:design-approve` — approve → design_approved (emits `DESIGN_APPROVED`)
-    or reject → draft (emits `DESIGN_REJECTED`); always requires notes on reject
+  - `intent:design-approve` — approve → design_approved (emits `DESIGN_APPROVED`
+    with `approval=true`) or reject → draft (emits `DESIGN_APPROVED` with
+    `approval=false`); always requires notes on reject
 
 ## Non-goals
 

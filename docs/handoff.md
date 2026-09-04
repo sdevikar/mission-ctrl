@@ -5,6 +5,27 @@
 
 ---
 
+## [2026-09-04] Session Summary — M2b design-gate skills implemented + spec drift fixed
+
+**OpenSpec change:** `pi-extension-shell-03b` (M2b) — in progress, not archived.
+
+- Previous session's uncommitted work verified: `recap.py`, `design_propose.py`,
+  `design_approve.py`, schemas, `spec-status` extension, manifest wiring,
+  `EventBuilder.design_proposed/design_approved` — all present, 19/19 tests
+  in `test_design_gate.py` pass, 98 pass repo-wide, ruff clean (fixed 12 lint
+  errors + 1 format drift in the new test file).
+- Spec fix (per original intent in `docs/design.md` §4 + shipped M0 core):
+  reject emits `DESIGN_APPROVED` with `approval=false` — removed the
+  `DESIGN_REJECTED` drift from 03b `proposal.md`, `design.md`, `tasks.md`.
+  Implementation already matched; spec was updated, not code.
+- `tasks.md`: schemas, 3 skills, state-machine ext, illegal-transition test
+  checked off. Still open: recap on all 3 fixtures × verbosity tiers, full
+  E2E lifecycle script (init → … → design-approve → done → status).
+- Kanban: 03b → 🔄 In Progress. Committed + pushed (see log).
+
+**Next:** write the full E2E lifecycle test + fixture-matrix recap tests,
+then archive 03b.
+
 ## [2026-09-04] Session Summary — logic-layer-02 complete + pi-extension-shell-03a complete
 
 **OpenSpec changes:** `logic-layer-02` (M1) — **all tasks complete**; `pi-extension-shell-03a` (M2a) — **all tasks complete**.

@@ -71,7 +71,7 @@ whatever the skill passes after validation.
 | `decision` | `str` | |
 | `new_status` | `Literal["design_approved", "draft"]` | |
 | **Error** | `SkillError(NOTES_REQUIRED)` if rejected without notes |
-| **Side effects** | Updates `specs.json`; emits `DESIGN_APPROVED` or `DESIGN_REJECTED` |
+| **Side effects** | Updates `specs.json`; emits `DESIGN_APPROVED` (`approval=true` on approve, `approval=false` with required notes on reject) |
 
 ## Constraints
 

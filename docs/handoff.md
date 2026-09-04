@@ -5,6 +5,27 @@
 
 ---
 
+## [2026-09-04] Session Summary — M2b closed out: fixture-matrix + E2E + archive
+
+**OpenSpec change:** `pi-extension-shell-03b` (M2b) — **all 8 tasks complete,
+archived** to `openspec/changes/archive/2026-09-04-pi-extension-shell-03b`.
+Also archived leftover `pi-extension-shell-03a` (16/16 tasks, shipped last
+session) to `openspec/changes/archive/2026-09-04-pi-extension-shell-03a`.
+Neither had delta specs (design-only changes) so no main-spec sync was needed.
+
+- Recap fixture-matrix (`test_design_gate.py` +12 tests): all 3 core fixtures
+  × brief/standard/full — focus expectations (mid-flight → spec_001,
+  others → none), MVP math (mid-flight 0/2, complex-graph 2/2 = 100%),
+  recommendations (mid-flight → none, complex-graph → spec_003, spec_005),
+  plus read-only guard on shared fixture dirs.
+- Full E2E (`test_lifecycle.py::test_full_lifecycle_with_design_gate_e2e`):
+  init → … → design-approve → in_progress → done → next/status with exact
+  8-event trail asserted.
+- **111 tests pass repo-wide; `ruff check` + `ruff format --check` clean.**
+- Kanban: 03a/03b → 📦 Archived; M2b item boxes checked.
+
+**Next:** `hooks-auto-onboarding-04` (M3) — session hooks + AGENTS.md sync.
+
 ## [2026-09-04] Session Summary — M2b design-gate skills implemented + spec drift fixed
 
 **OpenSpec change:** `pi-extension-shell-03b` (M2b) — in progress, not archived.

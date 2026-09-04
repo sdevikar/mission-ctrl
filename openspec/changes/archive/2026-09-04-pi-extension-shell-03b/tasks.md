@@ -20,10 +20,10 @@
       exist in the store
 
 ## Tests
-- [ ] Skill tests: design-propose rejects non-draft specs; design-approve
+- [x] Skill tests: design-propose rejects non-draft specs; design-approve
       rejects missing notes on rejection; recap returns correct RecapResult
       on all 3 fixtures at all verbosity tiers
-- [ ] E2E lifecycle script (full): init → add-idea → triage → spec-create →
+- [x] E2E lifecycle script (full): init → add-idea → triage → spec-create →
       design-propose → design-approve → spec-status(in_progress) →
       spec-status(done) → status, asserting `.intent/` state at each step
 - [x] Test: spec-status still rejects illegal transitions end-to-end

@@ -13,8 +13,8 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 | `core-foundation-01` | Core Foundation | M0 | 📦 Archived |
 | `logic-layer-02` | Logic Layer | M1 | 🔲 Planned |
 | ~~`pi-extension-shell-03`~~ | ~~Pi Extension Shell~~ | ~~M2~~ | ⚠️ Superseded (split → 03a/03b) |
-| `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 🔲 Planned |
-| `pi-extension-shell-03b` | Pi Extension Shell — Design Gate | M2b | 🔄 In Progress |
+| `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 📦 Archived |
+| `pi-extension-shell-03b` | Pi Extension Shell — Design Gate | M2b | 📦 Archived |
 | `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 🔲 Planned |
 | `dogfood-ship-v0-1-05` | Dogfood & Ship v0.1 | M4 | 🔲 Planned |
 | `log-feedback-06` | Feedback Logging Skill | M5-prep | 🔲 Planned |
@@ -70,7 +70,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M2a — Pi Extension Shell: Core Loop (7 skills)
-> OpenSpec: `pi-extension-shell-03a` | Status: 🔲 Planned
+> OpenSpec: `pi-extension-shell-03a` | Status: 📦 Archived (change archived 2026-09-04; core-loop skills shipped)
 > **Prerequisite:** Resolve Pi distribution mechanism (npm wrapper vs PyPI/pip) before starting
 
 - [ ] Scaffold `packages/pi-package` (Python, pyproject.toml, depends on `mission_ctrl_core`)
@@ -91,14 +91,14 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M2b — Pi Extension Shell: Design Gate (3 skills)
-> OpenSpec: `pi-extension-shell-03b` | Status: 🔄 In Progress
+> OpenSpec: `pi-extension-shell-03b` | Status: 📦 Archived (no delta specs — design-only change; single-event `DESIGN_APPROVED` semantics per `docs/design.md` §4)
 
-- [ ] Add design-gate schemas to `schemas.py` (RecapInput, DesignProposeInput, DesignApproveInput, etc.)
-- [ ] `intent:recap` — on-demand recap; optional verbosity override; returns `RecapResult`
-- [ ] `intent:design-propose` (takes Pi-supplied digest text)
-- [ ] `intent:design-approve` (approve / reject-with-required-notes)
-- [ ] Extend `intent:spec-status` to allow `design_approved → in_progress`
-- [ ] E2E full lifecycle: init → add-idea → triage → spec-create → design-propose → design-approve → spec-status(done) → status
+- [x] Add design-gate schemas to `schemas.py` (RecapInput, DesignProposeInput, DesignApproveInput, etc.)
+- [x] `intent:recap` — on-demand recap; optional verbosity override; returns `RecapResult`
+- [x] `intent:design-propose` (takes Pi-supplied digest text)
+- [x] `intent:design-approve` (approve / reject-with-required-notes)
+- [x] Extend `intent:spec-status` to allow `design_approved → in_progress`
+- [x] E2E full lifecycle: init → add-idea → triage → spec-create → design-propose → design-approve → spec-status(done) → status
 
 **Done when:** full lifecycle including design gate runs manually via Pi skills with correct state.
 

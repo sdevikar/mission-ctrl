@@ -1,11 +1,11 @@
 # Tasks: Hooks & Auto-Onboarding (M3) — hooks-auto-onboarding-04
 
 ## on_session_start
-- [ ] Detect `.intent/` presence; no-op gracefully if `.intent/` is absent
+- [x] Detect `.intent/` presence; no-op gracefully if `.intent/` is absent
 - [ ] Session-gap detection + verbosity tier selection (thresholds in design.md)
 - [ ] Inject recap before the user's first message
 - [ ] Append `SESSION_STARTED` event
-- [ ] Test: on_session_start no-ops cleanly when `.intent/` is absent (uninitialized project)
+- [x] Test: on_session_start no-ops cleanly when `.intent/` is absent (uninitialized project)
 
 ## on_before_send
 - [ ] Hardcoded implementation-intent pattern list (full-word, case-insensitive — see design.md)

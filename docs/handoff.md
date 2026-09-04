@@ -5,6 +5,15 @@
 
 ---
 
+## [2026-09-04] Session Start — M3 (hooks-auto-onboarding-04)
+
+Starting `hooks-auto-onboarding-04` (20 tasks, all unchecked). Read proposal +
+design + tasks. Notes: tier thresholds + pattern list are source constants;
+`INTENT_INTERCEPTED` / `INTENT_BYPASS_USED` need core `EventBuilder` extension
+(new decision/event models in `mission_ctrl_core`); jinja2 is not yet a
+pi-package dependency and will need adding. First task: `.intent/` presence
+detection + graceful no-op for `on_session_start`.
+
 ## [2026-09-04] Session Summary — M2b closed out: fixture-matrix + E2E + archive
 
 **OpenSpec change:** `pi-extension-shell-03b` (M2b) — **all 8 tasks complete,

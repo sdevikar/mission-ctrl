@@ -15,7 +15,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 | ~~`pi-extension-shell-03`~~ | ~~Pi Extension Shell~~ | ~~M2~~ | ⚠️ Superseded (split → 03a/03b) |
 | `pi-extension-shell-03a` | Pi Extension Shell — Core Loop | M2a | 📦 Archived |
 | `pi-extension-shell-03b` | Pi Extension Shell — Design Gate | M2b | 📦 Archived |
-| `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 🔲 Planned |
+| `hooks-auto-onboarding-04` | Hooks & Auto-Onboarding | M3 | 🔄 In Progress |
 | `dogfood-ship-v0-1-05` | Dogfood & Ship v0.1 | M4 | 🔲 Planned |
 | `log-feedback-06` | Feedback Logging Skill | M5-prep | 🔲 Planned |
 
@@ -105,7 +105,7 @@ Lightweight status tracking. Update `Status` as each change is applied and archi
 ---
 
 ## M3 — Hooks & Auto-Onboarding
-> OpenSpec: `hooks-auto-onboarding-04` | Status: 🔲 Planned
+> OpenSpec: `hooks-auto-onboarding-04` | Status: 🔄 In Progress
 
 - [ ] `on_session_start` hook: detect `.intent/` presence; no-op if absent; session-gap → verbosity tier (4 tiers per design.md)
 - [ ] Inject recap before user's first message; append `SESSION_STARTED` event
